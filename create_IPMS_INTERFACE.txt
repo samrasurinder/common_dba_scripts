@@ -1,0 +1,145 @@
+select file_name from dba_data_files where tablespace_name like 'WEB_IPMS_INTERFACE_%';
+
+create tablespace WEB_IPMS_INTERFACE_DATA_TDE datafile '+DATA' size 50M autoextend on next 10M encryption using 'AES256' default storage (encrypt); 
+
+create tablespace WEB_IPMS_INTERFACE_INDEX_TDE datafile '+DATA' size 50M autoextend on next 10M encryption using 'AES256' default storage (encrypt); 
+
+create tablespace WEB_IPMS_INTERFACE_DATA  datafile '+DATA' size 50M autoextend on ;
+
+create tablespace WEB_IPMS_INTERFACE_INDEX datafile '+DATA' size 50M autoextend on ;
+
+--
+uat
+
+CREATE USER IPMS_INTERFACE
+IDENTIFIED BY "TSTZU6g23xxEp$W"
+DEFAULT TABLESPACE WEB_IPMS_INTERFACE_DATA 
+TEMPORARY TABLESPACE TEMP
+PROFILE hr_profile
+ACCOUNT UNLOCK;
+ALTER USER IPMS_INTERFACE DEFAULT ROLE ALL;
+
+grant CREATE SESSION to IPMS_INTERFACE;
+grant UNLIMITED TABLESPACE to IPMS_INTERFACE;
+
+grant GRP_DB to IPMS_INTERFACE;
+grant CONNECT  to IPMS_INTERFACE;
+grant APPOWNER  to IPMS_INTERFACE;
+grant RESOURCE to IPMS_INTERFACE;
+grant XDBADMIN to IPMS_INTERFACE;
+grant DB_PUBLIC to IPMS_INTERFACE;
+grant HRONLINE_S to IPMS_INTERFACE;
+
+grant SELECT_CATALOG_ROLE to IPMS_INTERFACE;
+grant create session to IPMS_INTERFACE;
+
+create role IPMS_INTERFACE_s;
+create role IPMS_INTERFACE_IUD;
+GRANT   IPMS_INTERFACE_s   TO   REPOLEVED;
+GRANT IPMS_INTERFACE_s TO ALL_S;
+
+ALTER USER IPMS_INTERFACE QUOTA UNLIMITED ON WEB_IPMS_INTERFACE_DATA;
+ALTER USER IPMS_INTERFACE QUOTA UNLIMITED ON WEB_IPMS_INTERFACE_INDEX;
+
+select file_name from dba_data_files where tablespace_name like 'WEB_IPMS_INTERFACE_%';
+
+select tablespace_name from dba_tablespaces where tablespace_name like 'WEB_IPMS_INTERFACE_%';
+
+
+GRANT IPMS_INTERFACE_s TO BHOJANIKG;
+GRANT IPMS_INTERFACE_s TO SCHWIERRE;
+GRANT IPMS_INTERFACE_s TO DUGGANPJ;
+
+
+
+
+
+*********************************************
+
+
+
+for dev1
+create tablespace PMU_DATA  datafile '+DATA' size 50M autoextend on ;
+
+CREATE USER OABSDDSHARE
+IDENTIFIED BY DEVMks11FFsbA$8
+DEFAULT TABLESPACE PMU_DATA
+TEMPORARY TABLESPACE TEMP
+PROFILE hr_profile
+ACCOUNT UNLOCK;
+ALTER USER OABSDDSHARE DEFAULT ROLE ALL;
+
+
+
+
+
+
+
+SELECT 'ALTER TABLE ' || OBJECT_NAME ||' MOVE TABLESPACE '||' REP_INFORMATICA_PRD ;'
+FROM ALL_OBJECTS
+WHERE OWNER = 'INFT2'
+AND OBJECT_TYPE = 'TABLE';
+
+
+SELECT 'ALTER TABLE ' || OBJECT_NAME ||' MOVE TABLESPACE '||' REP_INFORMATICA_PRD ;'
+FROM ALL_OBJECTS
+WHERE OWNER = 'INFREAD'
+AND OBJECT_TYPE = 'TABLE';
+
+
+ SELECT 'ALTER TABLE ' || OBJECT_NAME ||' MOVE TABLESPACE '||' REP_INFORMATICA_PRD ;'
+FROM ALL_OBJECTS
+WHERE OWNER = 'INFREAD'
+AND OBJECT_TYPE = 'INDEX';
+
+
+SELECT 'ALTER TABLE ' || OBJECT_NAME ||' MOVE TABLESPACE '||' REP_INFORMATICA_PRD ;'
+FROM ALL_OBJECTS
+WHERE OWNER = 'INFREAD'
+AND OBJECT_TYPE = 'VIEW';
+
+
+create tablespace  pmu_date datafile '+DEV_DATA' size 100M autoextend on ;
+
+
+
+
+create temporary tablespace temp datafile '+CPY_DATA' size 100M autoextend on ;
+
+
+
+
+
+
+
+
+
+mks29005
+           create tablespace PS_SYSADM_DATA datafile '+DEV_DATA' size 100M autoextend on ;
+
+
+           create tablespace PS_SYSADM_INDEX datafile '+DEV_DATA' size 100M autoextend on ;
+
+3- User ACRS recreated in DEVKC
+
+CREATE USER sysadm
+IDENTIFIED BY mdaysy_123#
+DEFAULT TABLESPACE PS_SYSADM_DATA 
+TEMPORARY TABLESPACE TEMP
+PROFILE DEFAULT
+ACCOUNT UNLOCK;
+ALTER USER sysadm DEFAULT ROLE ALL;
+ALTER USER sysadm QUOTA UNLIMITED ON PS_SYSADM_DATA;
+ALTER USER sysadm QUOTA UNLIMITED ON PS_SYSADM_INDEX;
+
+
+
+
+
+create or replace directory DEV2SDG as '/infsharenonprod/oracle/export/DEV2SDG';
+
+
+GRANT read, write ON DIRECTORY DEV2SDG TO sysadm;
+
+
+

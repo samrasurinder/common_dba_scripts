@@ -1,0 +1,72 @@
+-- Flashback TST4 database
+
+SQL> select name from v$database;
+
+NAME
+---------
+TST4
+
+SSQL> SELECT NAME FROM V$RESTORE_POINT;
+
+NAME
+--------------------------------------------------------------------------------
+COLA_2020
+
+
+
+[oracle@hrewoel02 ~]$ srvctl stop database -d TST4
+
+
+export ORACLE_UNQNAME=TST4
+
+SQL>  select name,open_mode from v$database;
+
+NAME      OPEN_MODE
+--------- --------------------
+TST4      MOUNTED
+
+SQL> SELECT NAME FROM V$RESTORE_POINT;
+
+NAME
+--------------------------------------------------------------------------------
+COLA_2020
+
+SQL> select * from v$encryption_wallet;
+
+WRL_TYPE
+--------------------
+WRL_PARAMETER
+--------------------------------------------------------------------------------
+STATUS
+------------------
+file
+/hrewwnonprdfs01/Output/WALLET/WALLETS/$ORACLE_UNQNAME
+OPEN
+
+
+SQL> flashback database to restore point COLA_2020;
+
+Flashback complete.
+
+SQL> alter database open resetlogs;
+
+Database altered.
+
+SQL> select name ,open_mode from v$database;
+
+NAME      OPEN_MODE
+--------- --------------------
+TST4      READ WRITE
+
+SQL> shutdown immediate;
+Database closed.
+Database dismounted.
+ORACLE instance shut down.
+SQL> exit
+Disconnected from Oracle Database 11g Enterprise Edition Release 11.2.0.4.0 - 64bit Production
+With the Partitioning, Real Application Clusters, Automatic Storage Management, OLAP,
+Data Mining and Real Application Testing options
+[oracle@hrewoel02 ~]$ srvctl start database -d TST4
+[oracle@hrewoel02 ~]$ srvctl status database -d TST4
+Instance TST41 is running on node hrewoel02
+Instance TST42 is running on node hrewoel03

@@ -1,0 +1,14 @@
+
+
+[grid@hrvltstdb7601 RMAN_BKP]$ cat opsmask_bkp.rcv
+spool log to 'rman_bkp_OPSMASK.log'
+run {
+ allocate channel c1 device type disk format '/infshare/oracle/backup/OPSMASK/RMAN_BKP/%d_D_%T_%u_s%s';
+ allocate channel c2 device type disk format '/infshare/oracle/backup/OPSMASK/RMAN_BKP/%d_D_%T_%u_s%s';
+ allocate channel c3 device type disk format '/infshare/oracle/backup/OPSMASK/RMAN_BKP/%d_D_%T_%u_s%s';
+ allocate channel c4 device type disk format '/infshare/oracle/backup/OPSMASK/RMAN_BKP/%d_D_%T_%u_s%s';
+ backup database plus archivelog;
+ backup current controlfile format '/infshare/oracle/backup/OPSMASK/RMAN_BKP/controlfile_%U.bak';
+ backup spfile format '/infshare/oracle/backup/OPSMASK/RMAN_BKP/spfile_CRMMASK_%U.bak';
+}
+spool log off;

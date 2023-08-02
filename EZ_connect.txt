@@ -1,0 +1,28 @@
+OPS_TEST =
+  (DESCRIPTION =
+    (SDU = 32767)
+    (ADDRESS = (PROTOCOL = TCP)(HOST = prd-scan)(PORT = 1526))
+    (CONNECT_DATA =
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = OPS.HR.STATE.SBU)
+    )
+  )
+
+OPSCPY1 =
+  (description =
+    (load_balance = yes)
+    (address = (protocol = tcp)(host = cpy-ew-scan.hr.state.sbu)(port = 1526))
+    (connect_data = (service_name = OPSCPY1.hr.state.sbu)))
+
+
+CONNECT system/PRDT8Ick83$lGNa@hrewoel06.hr.state.sbu:1521/OPS.HR.STATE.SBU
+
+CONNECT system/PRDT8Ick83$lGNa@prd-scan:1526/OPS.HR.STATE.SBU
+
+
+[?7/?9/?2019 3:31 PM]  Ntoko, Jonathan N:  
+CONNECT username/password@[//]host[:port][/service_name] 
+ 
+
+
+CONNECT system/TSTNjr$3r0EjMQ3@cpy-ew-scan.hr.state.sbu:1526/OPSCPY1.hr.state.sbu

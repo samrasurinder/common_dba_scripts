@@ -1,0 +1,96 @@
+
+col FILE_NAME for a65
+set line 200
+select FILE_NAME,BYTES/(1024*1024*1024),MAXBYTES/(1024*1024*1024),AUTOEXTENSIBLE from dba_data_files
+where tablespace_name='GPAPP';
+
+SQL> alter tablespace GPAPP add datafile '+OPS_DATA' size 100M autoextend on maxsize 32767M;
+
+Tablespace altered.
+****************
+PSDEFAULT
+
+select FILE_NAME,BYTES/(1024*1024*1024),MAXBYTES/(1024*1024*1024),AUTOEXTENSIBLE from dba_data_files
+where tablespace_name='PSDEFAULT';
+
+ alter tablespace PSDEFAULT add datafile '+OPS_DATA' size 100M autoextend on maxsize 32767M;
+
+
+****************
+select FILE_NAME,BYTES/(1024*1024*1024),MAXBYTES/(1024*1024*1024),AUTOEXTENSIBLE from dba_data_files
+where tablespace_name='PSINDEX';
+
+alter tablespace PSINDEX add datafile '+OPS_DATA' size 100M autoextend on maxsize 32767M;
+*********************
+Temporary tablespace:-
+
+
+SQL> select FILE_NAME,bytes/(1024*1024*1024),MAXBYTES/(1024*1024*1024) from dba_temp_files where TABLESPACE_NAME='PSTEMP';
+SQL> alter tablespace PSTEMP add tempfile '+OPS_DATA' size 100M autoextend on maxsize 32000M;
+
+Tablespace altered.
+
+
+***************************************************
+Resumable:-
+
+set line 200
+col name for a75
+select NAME,STATUS,START_TIME,SUSPEND_TIME,RESUME_TIME from dba_resumable;
+************************************************************
+**** INDEX****************
+SQL> select SEGMENT_NAME,SEGMENT_TYPE,TABLESPACE_NAME from dba_segments where owner='SYSADM' and segment_name like '%PS_GP_RSLT_ACUM%';
+
+SEGMENT_NAME                                                                      SEGMENT_TYPE       TABLESPACE_NAME
+--------------------------------------------------------------------------------- ------------------ ------------------------------
+PS_GP_RSLT_ACUM                                                                   TABLE              GPAPP
+PSAGP_RSLT_ACUM                                                                   INDEX              PSINDEX
+
+SQL> select sum(BYTES)/(1024*1024*1024) from dba_free_space where TABLESPACE_NAME='PSINDEX';
+
+SUM(BYTES)/(1024*1024*1024)
+---------------------------
+                 106.103333
+
+SQL> select sum(BYTES)/(1024*1024*1024) from dba_free_space where TABLESPACE_NAME='GPAPP';
+
+SUM(BYTES)/(1024*1024*1024)
+---------------------------
+                 3.91571045
+
+
+
+********************************
+SQL> select TABLESPACE_NAME,sum(BYTES)/(1024*1024*1024) from dba_segments where owner='SYSADM' group by TABLESPACE_NAME order by 2 desc;
+
+TABLESPACE_NAME                SUM(BYTES)/(1024*1024*1024)
+------------------------------ ---------------------------
+GPAPP                                           286.917175
+PSINDEX                                         133.772949
+DS_AUDIT                                            15.125
+PSIMAGE                                          10.244751
+PTAUDIT                                             2.4375
+PSDEFAULT                                       2.10778809
+DS_CUSTOM                                       1.86187744
+PTTBL                                           1.38287354
+HRAPP                                           .691223145
+PTAMSG                                          .660888672
+HRLARGE                                         .614318848
+
+
+65 rows selected.
+
+SQL>
+
+UPDATE PS_OP_TRV_MSG_DAT SET OP_TM_TEMPLATE_TYP = DECODE(WL_TEMPLATE_ID, 'TM8_REGULAR_TEMPLATE', 'REGL', 'TM8_HLRT_TEMPLATE', 'HLRT', 'TM5_REGULAR_TEMPLATE', 'REGL', 'TM5_HLRT_TEMPLATE', 'HLRT') WHERE OP_TRV_MSG_TYPE IN ('TMFIVE', 'TMEIGHT');
+**********************************************************************************
+SQL> CREATE UNIQUE INDEX "SYSADM"."PS_GP_RSLT_PIN" ON "SYSADM"."PS_GP_RSLT_PIN" ("EMPLID", "CAL_RUN_ID", "EMPL_RCD", "GP_PAYGROUP", "CAL_ID", "ORIG_CAL_RUN_ID", "RSLT_SEG_NUM", "INSTANCE", "PIN_NUM", "SLICE_BGN_DT", "SLICE_END_DT") PARALLEL 12;
+
+Index created.
+
+SQL> CREATE UNIQUE INDEX "SYSADM"."PS_GP_RSLT_ACUM" ON "SYSADM"."PS_GP_RSLT_ACUM" ("EMPLID", "CAL_RUN_ID", "EMPL_RCD", "GP_PAYGROUP", "CAL_ID", "ORIG_CAL_RUN_ID", "RSLT_SEG_NUM", "PIN_NUM", "EMPL_RCD_ACUM", "ACM_FROM_DT", "ACM_THRU_DT", "SLICE_BGN_DT", "SEQ_NUM8")
+  2  TABLESPACE   PSINDEX  PARALLEL 20 ;
+
+
+Index created.
+******************************************************************

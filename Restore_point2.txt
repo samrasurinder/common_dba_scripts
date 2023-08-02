@@ -1,0 +1,36 @@
+
+connect as sysdba;
+
+SQL> create  restore  point  BEFORE_RELEASE_CHANGES  guarantee  flashback  database;
+
+
+SQL> select * from v$restore_point;      /* verify creation of above restore point */
+set line 200
+col name for a45
+select * from v$restore_point;
+
+
+
+Caution: Do not go beyond this point unless you want to flasback the database
+
+Note:  See doc to flashback database
+\\esocomsntap101\hrpublic$\Office Shares\Hr ex sdd dba\public\Flashback Database.docx
+               Execute Flashback Database via SQLPlus: (Used to rewind entire database back to a point) 
+                      [oracle@hrinfdb1001 ~]$ . oraenv
+                      ORACLE_SID = [PRD1] ? PRD1
+                      [oracle@hrinfdb1001 ~]$  srvctl stop database -d PRD /* all instances need to be down */
+                      [oracle@hrinfdb1001 ~]$  sqlplus / as sysdba
+                      SQL> startup mount; /* startup only one instance */
+                      SQL> flashback database to restore point BEFORE_RELEASE_CHANGES;
+                      SQL> alter database open resetlogs;
+
+
+Drop restore point:-
+-------------------
+
+connect as sysdba;
+
+SQL> drop  restore  point  BEFORE_RELEASE_CHANGES;
+
+SQL> select * from v$restore_point;      /* verify drop of above restore point */
+ 

@@ -1,0 +1,26 @@
+Jump servers for TST:-
+
+HRVWTSTMG1601   --- COMPLETE -- Surinder
+HRVWTSTMG1602  --- COMPLETE -- Surinder
+HRVWTSTMG1603 --- COMPLETE -- Surinder <-- Having issue to de-install the old version. Will check with NetOps team.
+HRVWTSTMG1604  --- COMPLETE -- Surinder
+HREWWNONPRDFS01 --- COMPLETE -- Surinder
+
+
+PMU Servers:-
+Kevin, 
+
+The servers are :
+D:\PMUDIR   <-- PMU client location.
+
+Hrvwtstmg1601
+Hrvwtstmg1602
+Hrvwtstmg1603
+Hrvwtstmg1604
+
+
+Thank you,
+
+Joseph M. Moses CTR
+GTM/EX/ESD/OAB
+

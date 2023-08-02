@@ -1,0 +1,52 @@
+./dbca -silent -createDatabase -templateName /u02/app/oracle/product/19.3.0/db_1/assistants/dbca/templates/General_Purpose.dbc -gdbName PMUTST -sid PMUTST -sysPassword Testing123# -systemPassword Testing123# -storageType +ASM -diskgroupName +DATA
+
+[oracle@hrvlcpydb7608 dbca]$ cd templates/
+[oracle@hrvlcpydb7608 templates]$ ls -ltr
+total 370964
+-rw-r----- 1 oracle oinstall     10772 Apr  5  2019 New_Database.dbt
+-rw-r----- 1 oracle oinstall  86548480 Apr 17  2019 pdbseed.dfb
+-rw-r----- 1 oracle oinstall 274554880 Apr 17  2019 Seed_Database.dfb
+-rw-r----- 1 oracle oinstall  18726912 Apr 17  2019 Seed_Database.ctl
+-rw-r----- 1 oracle oinstall      4888 Apr 17  2019 Data_Warehouse.dbc
+-rw-r----- 1 oracle oinstall      6611 Apr 17  2019 pdbseed.xml
+-rw-r----- 1 oracle oinstall      4768 Apr 26  2020 General_Purpose.dbc
+[oracle@hrvlcpydb7608 templates]$ pwd
+/u02/app/oracle/product/19.3.0/db_1/assistants/dbca/templates
+[oracle@hrvlcpydb7608 templates]$ cd ../
+[oracle@hrvlcpydb7608 dbca]$ cd ../
+[oracle@hrvlcpydb7608 assistants]$ cd ../
+[oracle@hrvlcpydb7608 db_1]$ cd bin
+[oracle@hrvlcpydb7608 bin]$ ls -ltr dbca
+-rwxr-x--- 1 oracle oinstall 7719 Apr 26  2020 dbca
+[oracle@hrvlcpydb7608 bin]$ ./dbca -silent -createDatabase -templateName /u02/app/oracle/product/19.3.0/db_1/assistants/dbca/templates/General_Purpose.dbc -gdbName PMUTST -sid PMUTST -sysPassword Testing123# -systemPassword Testing123# -storageType +ASM -diskgroupName +DATA
+Prepare for db operation
+10% complete
+Registering database with Oracle Restart
+14% complete
+Copying database files
+43% complete
+Creating and starting Oracle instance
+45% complete
+49% complete
+53% complete
+56% complete
+62% complete
+Completing Database Creation
+68% complete
+70% complete
+71% complete
+Executing Post Configuration Actions
+100% complete
+Database creation complete. For details check the logfiles at:
+ /u02/app/oracle/cfgtoollogs/dbca/PMUTST.
+Database Information:
+Global Database Name:PMUTST
+System Identifier(SID):PMUTST
+Look at the log file "/u02/app/oracle/cfgtoollogs/dbca/PMUTST/PMUTST.log" for further details.
+[oracle@hrvlcpydb7608 bin]$
+
+alter system set db_domain='HR.STATE.SBU' scope=spfile;
+alter system set local_listener='' scope=both;
+alter system register;
+
+

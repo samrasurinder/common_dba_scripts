@@ -1,0 +1,52 @@
+--- Resize Datafiles.
+
+Select replace(replace(replace(replace('alter database datafile ''$$FILE_NAME$$'' resize $$HWM_SIZE$$$$SEMI_COLON$$', '$$FILE_NAME$$', file_name), '$$HWM_SIZE$$', hwm_size), '$$SEMI_COLON$$', ';'), '$$SLASH$$', '/') v_sql,
+      round(sum(free_bytes_after_hwm) over () / 1024/1024/1024) gb,
+      v_free_extents.*
+from
+(
+      --Free extents.
+      select
+           dba_free_space.tablespace_name,
+            dba_data_files.file_name,
+            dba_free_space.file_id,
+            hwm_size,
+            sum(case when block_id < last_block then dba_free_space.bytes else 0 end) free_bytes_before_hwm,
+            sum(case when block_id > last_block then dba_free_space.bytes else 0 end) free_bytes_after_hwm
+      from dba_free_space
+      join
+      (
+           --Last allocated extents.
+            select
+                  tablespace_name,
+                  file_id,
+                  max(block_id + blocks - 1) last_block,
+                  max(block_id + blocks - 1) * (max(bytes)/max(blocks)) hwm_size
+            from dba_extents
+            --where tablespace_name = 'PART_B_FACT_200912_16K'
+            group by tablespace_name, file_id
+      ) last_allocated_extent
+            on dba_free_space.tablespace_name = last_allocated_extent.tablespace_name
+            and dba_free_space.file_id = last_allocated_extent.file_id
+      --This join inner join filters out temporary objects.
+      join dba_data_files
+            on dba_free_space.file_id = dba_data_files.file_id
+      where dba_free_space.tablespace_name not in ('SYSTEM', 'SYSAUX')
+            and dba_free_space.tablespace_name not like '%UNDO%'
+      --where dba_free_space.tablespace_name = 'PART_B_FACT_200912_16K'
+      group by dba_free_space.tablespace_name, dba_data_files.file_name, dba_free_space.file_id, hwm_size
+)
+v_free_extents
+where free_bytes_after_hwm > 0
+order by free_bytes_after_hwm desc;
+
+--The above space query is often too slow.
+--In that case you can repeatedly run this query with a lower number.
+--Start with a high number and then cut it in half and do it again.
+with decrease_size as (select 5 gb from dual)
+select
+      'alter database datafile '''||file_name||''' resize '||to_char(round(bytes/1024/1024/1024)-(select gb from decrease_size))||'g;'
+      --,bytes/1024/1024/1024 gb, dba_data_files.*
+from dba_data_files
+where bytes > (select gb from decrease_size) * 1024*1024*1024
+order by 1 desc;

@@ -1,0 +1,53 @@
+SQL> select distinct tablespace_name from dba_segments where owner in ('SECREF');
+
+TABLESPACE_NAME
+------------------------------
+WEB_SECREF_DATA
+WEB_SECREF_DATA_TDE
+WEB_SECREF_INDEX
+WEB_SECREF_INDEX_TDE
+
+SQL>
+SQL> select distinct tablespace_name from dba_segments where owner in ('IDB');
+
+TABLESPACE_NAME
+------------------------------
+DB_IDB_DATA
+DB_IDB_INDEX
+WEB_IDB_DATA_TDE
+WEB_IDB_INDEX_TDE
+
+SQL> select distinct tablespace_name from dba_segments where owner in ('ESRT_INTERFACE');
+
+TABLESPACE_NAME
+------------------------------
+DB_ESRT_INTERFACE_DATA
+DB_ESRT_INTERFACE_INDEX
+WEB_ESRT_INTERFACE_DATA_TDE
+WEB_ESRT_INTERFACE_INDEX_TDE
+
+********************************************
+
+
+
+create tablespace WEB_SECREF_DATA_TDE datafile '+PRD_DATA' size 50M autoextend on next 10M encryption using 'AES256' default storage (encrypt);
+create tablespace WEB_SECREF_INDEX_TDE datafile '+PRD_DATA' size 50M autoextend on next 10M encryption using 'AES256' default storage (encrypt);  
+
+create tablespace WEB_SECREF_DATA  datafile '+PRD_DATA' size 50M autoextend on ;
+create tablespace WEB_SECREF_INDEX datafile '+PRD_DATA' size 50M autoextend on ;
+
+
+
+create tablespace WEB_IDB_DATA_TDE datafile '+PRD_DATA' size 50M autoextend on next 10M encryption using 'AES256' default storage (encrypt); 
+create tablespace WEB_IDB_INDEX_TDE datafile '+PRD_DATA' size 50M autoextend on next 10M encryption using 'AES256' default storage (encrypt); 
+
+create tablespace DB_IDB_DATA  datafile '+PRD_DATA' size 50M autoextend on ;
+create tablespace DB_IDB_INDEX datafile '+PRD_DATA' size 50M autoextend on ;
+
+
+create tablespace WEB_ESRT_INTERFACE_DATA_TDE datafile '+PRD_DATA' size 50M autoextend on next 10M encryption using 'AES256' default storage (encrypt); 
+create tablespace WEB_ESRT_INTERFACE_INDEX_TDE datafile '+PRD_DATA' size 50M autoextend on next 10M encryption using 'AES256' default storage (encrypt); 
+
+create tablespace DB_ESRT_INTERFACE_DATA  datafile '+PRD_DATA' size 50M autoextend on ;
+create tablespace DB_ESRT_INTERFACE_INDEX datafile '+PRD_DATA' size 50M autoextend on ;
+

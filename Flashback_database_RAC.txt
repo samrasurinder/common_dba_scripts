@@ -1,0 +1,157 @@
+* Ensure the restore point still exists
+
+SQL>
+select name,database_role,open_mode,flashback_on,log_mode from v$database;
+
+SQL>
+show parameter recovery;
+
+SQL>
+SELECT NAME, SCN, TIME, DATABASE_INCARNATION#, 
+GUARANTEE_FLASHBACK_DATABASE, STORAGE_SIZE FROM 
+V$RESTORE_POINT WHERE GUARANTEE_FLASHBACK_DATABASE='YES';
+
+set line 200
+col name for a25
+col TIME for a45
+SELECT NAME, SCN, TIME, DATABASE_INCARNATION#,GUARANTEE_FLASHBACK_DATABASE, STORAGE_SIZE FROM
+V$RESTORE_POINT WHERE GUARANTEE_FLASHBACK_DATABASE='YES'; 
+
+NAME                             SCN TIME                                          DATABASE_INCARNATION# GUA STORAGE_SIZE
+------------------------- ---------- --------------------------------------------- --------------------- --- ------------
+CLEAN_DB                  3.7321E+12 15-MAR-19 03.27.08.000000000 PM                                   2 YES   2.9259E+10
+
+
+-----------------------------------------------------------------------------------------------------------------------
+
+* Before beginning anything send out an email informing every group thatrefresh is beginning
+
+Include: HRCM <HRCM@state.gov>; HR-EX-SDD <HR-EX-SDD@state.gov>; HR-EX-SOD <HR-EX-SOD@state.gov>; HR-EX-ESD-OAB <HR-EX-ESD-OAB@state.gov>
+CC: HR-EX-ESD
+
+Subject:
+TST4 Flashback will begin momentarily
+
+Message:
+TST4 will be flashed back to restore point CLEAN_DB momentarily
+
+-----------------------------------------------------------------------------------------------------------------------
+
+* Login to:
+	- hreewphrap01
+	- hrewwtstws2001
+	- hrewwtstap2001
+
+- Stop the PIA Services on the WebServer hrewwtstws2001
+*** tst4-PIA
+
+* From hrewwtstap2001
+- CMD as Administrator
+- cd D:\HR91\appserv
+- Issue psadmin
+- 1 Choose Aplication Server
+- 1 Administer Domain
+- 4 TST4
+- 2 Domain shutdown menu
+- 1 Normal Shutdown
+
+**** Should see 8 processes stopped
+
+- Quit back to the maine menu and select the Process Scheduler
+
+- 2 Process Scheduler
+- 1 Administer Domain
+- 4 TST4
+- 2 Domain Shutdown menu
+- 1 Normal Shutdown
+
+**** Should see 8 processes stopped
+
+- Navigate to \\hrewwtstap2001\HR91\appserv\prcs\TST4\CACHE\CACHE
+- Issue ctrl all and SHIFT delete
+
+---------------------------------------------------------------------------------------------------------------
+
+* Flashback RAC database
+
+- Shutdown the database
+Command:
+srvctl stop database -d TST4
+
+srvctl status database -d TST4
+
+- Mount the instance on one node
+- Use SQL*Plus or svrctl
+- Set ORAENV
+- Set ORACLE_UNQNAME for wallet
+
+export ORACLE_UNQNAME=TST4
+
+SQL>
+startup mount;
+
+- Alternativeley
+
+Command:
+srvctl start instance -d <db_unque_name> -i <instance_name> -o mount
+
+- Flashback the database
+- Can get the name from V$RESTORE_POINT view
+
+SQL>
+flashback database to restore point CLEAN_DB;
+
+- Open the database with the RESETLOGS clause
+
+SQL>
+alter database open resetlogs;
+
+- Shutdown the datase
+SQL>
+shutdown immediate;
+
+- Open the RAC
+
+export ORACLE_UNQNAME=TST4
+Command:
+srvctl start database -d TST4
+
+- Make sure the wallet is open in both instances
+
+SQL>
+select *  from v$encryption_wallet; 
+
+- Check current SCN
+3.7321E+12
+
+- Verify Guaranteed restore point is still there
+SQL>
+SELECT NAME, SCN, TIME, DATABASE_INCARNATION#, 
+GUARANTEE_FLASHBACK_DATABASE, STORAGE_SIZE FROM 
+V$RESTORE_POINT WHERE GUARANTEE_FLASHBACK_DATABASE='YES';
+
+---------------------------------------------------------------------------------------------------------------
+
+* Clear WS cache
+- From hrewwtstap2001
+- Navigate to the \\hrewwtstws2001\HR91\webserv\tst4\applications\peoplesoft\PORTAL.war\tst4\cache directory 
+- Issue  ctrl all and SHIFT delete
+
+* From hreewphrap01
+- Move all files from \\hrewwtstap2001\D$\HR91\user\TST4\SQR to  \\hrewwtstap2001\D$\HR91\user\TST4\SQR\archive\
+- Copy SQR directory FILES from \\hreewprdap2010\d$\HR91\user\PRD\SQR to \\hrewwtstap2001\D$\HR91\user\TST4\SQR
+
+- Boot Scheduler process *** 7 processes started
+- Boot Application server *** 13 processes started 
+
+- Start the PIA Services on the WebServer hrewwtstws2001
+
+---------------------------------------------------------------------------------------------------------------
+
+* Send email to PSadmins to comlete verification.
+Recipeints: Corona, Manuel A <CoronaMA@state.gov>; Reynon, Jerold J <ReynonJJ@state.gov> ; Khan, Ali <KhanA9@state.gov>
+HR-EX-ESD-OAB
+
+Message:
+TST4 flashback to restore point CLEAN_DB has completed.
+At your earliest convenience please validate for  release.

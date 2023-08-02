@@ -1,0 +1,32 @@
+nohup expdp \"/ as sysdba\" schemas=SYSADM directory=EOD dumpfile=EODPRD_SYSADM_EXP_20181128.dmp logfile=EODPRD_SYSADM_EXP_20181128.log &
+
+CPY2_SYSADM_EXP_20181211.dmp
+
+nohup expdp \"/ as sysdba\" schemas=SYSADM directory=TEMP2 dumpfile=CPY2_SYSADM_EXP_20181226_ESSR54365.dmp logfile=CPY2_SYSADM_EXP_20181226_ESSR54365.log &
+
+EODTEST:-
+nohup expdp \"/ as sysdba\" schemas=SYSADM directory=TEMP2 dumpfile=EODTST_SYSADM_EXP_20190102_ESSR54566.dmp logfile=EODTST_SYSADM_EXP_20190102_ESSR54566_log.log &
+***********************************
+Prod Export:-
+
+nohup expdp \"/ as sysdba\" DUMPFILE=Expdp_CRM_full_metadata.dmp directory=CRM_SYSADM full=Y CONTENT=METADATA_ONLY logfile=expdp_CRM_full_log PARALLEL=4 &
+
+******************************************
+
+Prod OPS Export:-
+
+nohup expdp \"/ as sysdba\" DUMPFILE=Expdp_OPS_full_metadata.dmp directory=OPS full=Y CONTENT=METADATA_ONLY logfile=expdp_OPS_full_log.log PARALLEL=4 &
+
+****************************
+UAT:-
+nohup expdp \"/ as sysdba\" schemas=REETA DUMPFILE=Expdp_REETA_UAT_metadata_0122.dmp directory=CRM_SYSADM  CONTENT=METADATA_ONLY logfile=Expdp_REETA_UAT_metadata_0122_log.log PARALLEL=4 &
+expdp \"/ as sysdba\" schemas=REETA DUMPFILE=Expdp_REETA_UAT_metadata_0122.dmp directory=TEMP2  CONTENT=METADATA_ONLY logfile=Expdp_REETA_UAT_metadata_0122_log.log PARALLEL=4 
+
+
+expdp \"/ as sysdba\" schemas=IPMS_INTERFACE DUMPFILE=Expdp_IPMS_INTERFACE_metadata_CPY1.dmp directory=TEMP2  CONTENT=METADATA_ONLY logfile=Expdp_IPMS_INTERFACE_metadata_CPY1_log.log 
+
+impdp \"/ as sysdba\" schemas=IPMS_INTERFACE DUMPFILE=Expdp_IPMS_INTERFACE_metadata_CPY1.dmp directory=TEMP2  CONTENT=METADATA_ONLY logfile=impdp_IPMS_INTERFACE_DEVS.log 
+
+********************************************************************************
+*** Users Removed from the database.
+expdp \"/ as sysdba\" schemas=ADMBOOKWALTERDM,BOOKWALTERDM DUMPFILE=Expdp_DEBI_account_backup_PRDREP.dmp directory=PRDREP  logfile=Expdp_Debi_schema_PRDREP.log 

@@ -1,0 +1,118 @@
+- Create a new Wallet on a New Oracle database.
+Step1:- cd to wallet folder
+        cd /u02/app/oracle/WALLETS/PMUTST/
+(a) Create wallet Key
+ALTER SYSTEM SET ENCRYPTION KEY IDENTIFIED BY "Testing123#Testing123#";
+(b) Create auto login:-
+ADMINISTER KEY MANAGEMENT CREATE LOCAL AUTO_LOGIN KEYSTORE FROM KEYSTORE '/u02/app/oracle/WALLETS/PMUTST/' IDENTIFIED BY "Testing123#Testing123#";
+
+CREATE TABLESPACE WEB_GRB_ASSIST_2_DATA_TDE
+DATAFILE '+PRD_DATA' SIZE 100M
+AUTOEXTEND ON maxsize 31G
+ENCRYPTION USING 'AES256'
+DEFAULT STORAGE(ENCRYPT);
+CREATE TABLESPACE WEB_GRB_FRAMEWORK_2_DATA_TDE
+DATAFILE '+PRD_DATA' SIZE 100M
+AUTOEXTEND ON maxsize 31G
+ENCRYPTION USING 'AES256'
+DEFAULT STORAGE(ENCRYPT);
+CREATE TABLESPACE WEB_GRB_ASSIST_2_INDEX_TDE
+DATAFILE '+PRD_DATA' SIZE 100M
+AUTOEXTEND ON maxsize 31G
+ENCRYPTION USING 'AES256'
+DEFAULT STORAGE(ENCRYPT);
+CREATE TABLESPACE WEB_GRB_FRAMEWORK_2_INDEX_TDE
+DATAFILE '+PRD_DATA' SIZE 100M
+AUTOEXTEND ON maxsize 31G
+ENCRYPTION USING 'AES256'
+DEFAULT STORAGE(ENCRYPT);
+
+
+META_DATA_TDE
+
+META_INDEX_TDE 
+
+CREATE TABLESPACE META_DATA_TDE DATAFILE '+DATA' SIZE 100M
+AUTOEXTEND ON maxsize UNLIMITED ENCRYPTION USING 'AES256' DEFAULT STORAGE(ENCRYPT);
+
+CREATE TABLESPACE META_INDEX_TDE DATAFILE '+DATA' SIZE 100M AUTOEXTEND ON maxsize UNLIMITED 
+ENCRYPTION USING 'AES256' DEFAULT STORAGE(ENCRYPT);
+
+
+userid="/ as sysdba"
+DIRECTORY=PMUTST
+REMAP_SCHEMA=PMU:PMU
+DUMPFILE=expdp_PMU_schema_HROABTST.dmp
+LOGFILE=impdp_PMU_schema.log
+
+
+Export PMU schema:-
+
+userid="/ as sysdba"
+estimate=statistics
+SCHEMAS=PMU
+DIRECTORY=HROABTST
+DUMPFILE=expdp_PMU_schema_HROABTST.dmp
+LOGFILE=expdp_PMU_schema_HROABTST_log.log
+PARALLEL=4
+
+
+**************************************
+
+[oracle@hrvlcpydb7608 PMUTST]$ pwd
+/u02/app/oracle/WALLETS/PMUTST
+[oracle@hrvlcpydb7608 PMUTST]$ sqlplus / as sysdba
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Wed May 26 16:13:49 2021
+Version 19.11.0.0.0
+
+Copyright (c) 1982, 2020, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.11.0.0.0
+
+SQL> select * from global_name;
+
+GLOBAL_NAME
+--------------------------------------------------------------------------------
+PMUTST
+
+SQL> ALTER SYSTEM SET ENCRYPTION KEY IDENTIFIED BY "Testing123#Testing123#";
+
+System altered.
+
+SQL> !ls -ltr
+total 4
+-rw------- 1 oracle oinstall 2987 May 26 16:14 ewallet.p12
+
+SQL> ADMINISTER KEY MANAGEMENT CREATE LOCAL AUTO_LOGIN KEYSTORE FROM KEYSTORE '/u02/app/oracle/WALLETS/PMUTST/' IDENTIFIED BY "Testing123#Testing123#";
+
+keystore altered.
+
+SQL> !ls -ltr
+total 8
+-rw------- 1 oracle oinstall 2987 May 26 16:14 ewallet.p12
+-rw------- 1 oracle oinstall 3048 May 26 16:14 cwallet.sso
+
+SQL> select * from v$encryption_wallet;
+
+WRL_TYPE
+--------------------
+WRL_PARAMETER
+--------------------------------------------------------------------------------
+STATUS                         WALLET_TYPE          WALLET_OR KEYSTORE FULLY_BAC
+------------------------------ -------------------- --------- -------- ---------
+    CON_ID
+----------
+FILE
+/u02/app/oracle/WALLETS/PMUTST/
+OPEN                           PASSWORD             SINGLE    NONE     NO
+         0
+******************************
+
+CREATE TABLE persons(
+        first_name VARCHAR2(50) NOT NULL,
+    last_name VARCHAR2(50) NOT NULL,
+    ) tablespace META_DATA_TDE ;

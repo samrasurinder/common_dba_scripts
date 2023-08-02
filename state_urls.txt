@@ -1,0 +1,3 @@
+1. OEM 12c - Manage ASM with OEM
+
+https://docs.oracle.com/database/121/OSTMG/GUID-519175D4-B857-4DD2-B177-09A2D1643E3C.htm#OSTMG21000

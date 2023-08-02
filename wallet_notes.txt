@@ -1,0 +1,30 @@
+CRM
+alter system set wallet open identified by CRMQsE$U6evq
+PRD
+alter system set wallet open identified by PrD$2x1mEuQ4
+SNCPRD:-
+
+alter system set wallet open identified by sncattx25$div1
+
+
+**************************************
+
+wallet notes - 
+                
+To force client to see wallet on all instances, 
+on each host, export ORACLE_UNQNAME=<ENV>, connect to instance and run 
+                Select wrl_parameter,status from v$encryption_wallet;  - to make oracle see wallet, then run gv$ select...
+Set line 200
+col WRL_PARAMETER for a65
+col STATUS for a45
+select instance_name,host_name from gv$instance;
+Select inst_id,wrl_parameter,status from gv$encryption_wallet order by 1; 
+Select inst_id,wrl_parameter,status from gv$encryption_wallet; 
+SELECT COUNT(*) FROM MASK.HASH_FIRST_NAME;
+
+                                to verify wallet is open on all instances (that client sees wallet ...)
+
+should not need - 
+alter system set wallet open identified by <pwd>;
+
+

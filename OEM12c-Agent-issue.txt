@@ -1,0 +1,71 @@
+--- When agent doesn't start with "thrashing error" 
+-- Remove the files in state/ folder.
+==================================================================================================
+
+
+[oracle@hrewoel02 emd]$ cd /u02/app/oracle/agent12c/agent_inst/sysman/emd/state/
+
+[oracle@hrewoel02 state]$ ls -ltr
+total 136
+drwxr-----.  2 oracle oinstall  4096 Sep 21  2017 inbox
+drwxr-----.  3 oracle oinstall  4096 Sep 21  2017 storage
+drwxr-----. 10 oracle oinstall  4096 Sep 21  2017 fetchlet_state
+drwxr-----.  2 oracle oinstall  4096 Sep 21  2017 oracleHomeFirstConfig
+drwxr-----.  5 oracle oinstall  4096 Sep 21  2017 recvlet_state
+drwxr-----. 15 oracle oinstall  4096 Sep 21  2017 statemgmt
+drwxr-----. 12 oracle oinstall  4096 Nov 16  2017 configstate
+drwxr-----.  2 oracle oinstall  4096 Dec 12  2017 mcePersist
+drwxr-----. 16 oracle oinstall  4096 Apr 25  2018 rac_database
+-rw-r-----.  1 oracle oinstall    10 Oct 19  2018 FDE9C20AF993812D99657C5199C4FD67_failedLogin.log
+drwxr-----.  2 oracle oinstall 12288 Jun  5  2019 adr
+-rw-r-----.  1 oracle oinstall    10 Jun 17  2019 DBCA5845823B80C8ACA5EF7CF06256F0_failedLogin.log
+-rw-r-----.  1 oracle oinstall    10 Aug 12 15:21 CA8341C208CDBA43A4847202BCB5B001_failedLogin.log
+-rw-r-----.  1 oracle oinstall    10 Aug 12 21:53 9F54E5AA430B1709C8BCBE30C09DAC60_failedLogin.log
+-rw-r-----.  1 oracle oinstall    10 Sep 10 01:04 1200089EB71795A395F9663BF5473F53_failedLogin.log
+-rw-r-----.  1 oracle oinstall    17 Dec  7 09:34 B368F3F588797A755F37379637781137.alerthrewoel02.log
+drwxr-----.  3 oracle oinstall  4096 Dec  7 09:37 has
+-rw-r-----.  1 oracle oinstall    10 Dec 17 20:27 5FBC1F196ADD40CC437122D62E75616D_failedLogin.log
+-rw-r-----.  1 oracle oinstall    10 Jan  7 19:57 BA27758C2599488C82245E138DA06652_failedLogin.log
+drwxr-----.  2 oracle oinstall  4096 Jan 30 23:51 configLogs
+-rw-r-----.  1 oracle oinstall    10 Feb  1 00:08 A74068DB126E5B55289BFE2CD1A14DE9_failedLogin.log
+-rw-r-----.  1 oracle oinstall    10 Feb  1 00:21 A528C6721076F329C4B35CA17D27CC21_failedLogin.log
+-rw-r-----.  1 oracle oinstall    10 Feb  1 00:24 9E8E2EC5AD988DE53B93D813D16B71B2_failedLogin.log
+-rw-r-----.  1 oracle oinstall    10 Feb  1 01:03 6AA5706B5B29EF346F55E0DA7267C08C_failedLogin.log
+-rw-r-----.  1 oracle oinstall    10 Feb  1 02:51 9846E93D4E8FA9728A451EA2DC337FB1_failedLogin.log
+-rw-r-----.  1 oracle oinstall    10 Feb  1 08:43 0DAFAA1622BFE00E8C79160AD046BF01_failedLogin.log
+-rw-r-----.  1 oracle oinstall    10 Feb  1 15:07 F86C6D62CF441A1637CA11ABF2C8D856_failedLogin.log
+-rw-r-----.  1 oracle oinstall    10 Feb  1 15:13 0EFABE9A55B2BBF1733E9726C1ABEEF7_failedLogin.log
+-rw-r-----.  1 oracle oinstall     9 Feb  1 18:04 5E7258F9C07AFA3565FD695FD49BBC4B_lsnr_log_size.log
+drwxr-----.  2 oracle oinstall  4096 Feb  1 18:27 severityTraceRecords
+-rw-r-----.  1 oracle oinstall    40 Feb  1 18:27 A796CC82455EC6D3061F5AB15E923340.alerthrewoel02.log
+drwxr-----.  2 oracle oinstall  4096 Feb  1 18:29 persistSchedules
+[oracle@hrewoel02 state]$ rm -rf *.*
+[oracle@hrewoel02 state]$ ls -ltr
+total 64
+drwxr-----.  2 oracle oinstall  4096 Sep 21  2017 inbox
+drwxr-----.  3 oracle oinstall  4096 Sep 21  2017 storage
+drwxr-----. 10 oracle oinstall  4096 Sep 21  2017 fetchlet_state
+drwxr-----.  2 oracle oinstall  4096 Sep 21  2017 oracleHomeFirstConfig
+drwxr-----.  5 oracle oinstall  4096 Sep 21  2017 recvlet_state
+drwxr-----. 15 oracle oinstall  4096 Sep 21  2017 statemgmt
+drwxr-----. 12 oracle oinstall  4096 Nov 16  2017 configstate
+drwxr-----.  2 oracle oinstall  4096 Dec 12  2017 mcePersist
+drwxr-----. 16 oracle oinstall  4096 Apr 25  2018 rac_database
+drwxr-----.  2 oracle oinstall 12288 Jun  5  2019 adr
+drwxr-----.  3 oracle oinstall  4096 Dec  7 09:37 has
+drwxr-----.  2 oracle oinstall  4096 Jan 30 23:51 configLogs
+drwxr-----.  2 oracle oinstall  4096 Feb  1 18:27 severityTraceRecords
+drwxr-----.  2 oracle oinstall  4096 Feb  1 18:29 persistSchedules
+[oracle@hrewoel02 state]$ rm -rf *
+[oracle@hrewoel02 state]$ ls -ltr
+total 0
+[oracle@hrewoel02 state]$ cd ../../../
+[oracle@hrewoel02 agent_inst]$ cd bin
+[oracle@hrewoel02 bin]$ ./emctl clearstate agent
+Oracle Enterprise Manager Cloud Control 12c Release 5
+Copyright (c) 1996, 2015 Oracle Corporation.  All rights reserved.
+EMD clearstate completed successfully
+[oracle@hrewoel02 bin]$ ./emctl sta^Cgent
+[oracle@hrewoel02 bin]$ pwd
+/u02/app/oracle/agent12c/agent_inst/bin
+[oracle@hrewoel02 bin]$ ./emctl start  agent

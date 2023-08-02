@@ -1,0 +1,28 @@
+
+*************************************
+PCSTRAVEL -- JOB_200 -- After long running Release night.
+
+Please verify
+(1)first set job process to 0, then disable all jobs, reset job process to 10, then enable all jobs . That's it, it will reset next run_date
+
+(2) Disable jobs:-
+select 'exec dbms_scheduler.disable(' || '''' ||owner || '.' ||job_name|| '''' || ');' from dba_Scheduler_jobs where job_name like 'JOB%' and enabled = 'TRUE' order by 1; 
+
+(3)Enable jobs:-
+select 'exec dbms_scheduler.enable(' || '''' ||owner || '.' ||job_name|| '''' || ');' from dba_Scheduler_jobs where job_name like 'JOB%' and enabled = 'TRUE' order by 1; 
+*************************************
+
+BEGIN
+sys.dbms_scheduler.set_attribute( name => '"ESRT"."JOB_120"', attribute => 'job_action', value => 'begin
+/* nightly refresh of Person and Person EFM */ esrt.prc_load_external_person_job;
+end; ');
+
+END; 
+/
+******************************
+
+BEGIN
+sys.dbms_scheduler.disable( '"ESRT"."JOB_120"' );
+sys.dbms_scheduler.set_attribute( name => '"ESRT"."JOB_120"', attribute => 'start_date', value => to_timestamp_tz('2020-01-06 03:01:00 America/New_York', 'YYYY-MM-DD HH24:MI:SS TZR'));
+sys.dbms_scheduler.enable( '"ESRT"."JOB_120"' );
+END;

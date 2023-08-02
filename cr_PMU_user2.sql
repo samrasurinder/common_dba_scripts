@@ -1,0 +1,12 @@
+CREATE USER ADMMUELLERM 
+IDENTIFIED BY Rockstar123#
+DEFAULT TABLESPACE USERS
+TEMPORARY TABLESPACE TEMP
+PROFILE HR_PROFILE_USER
+ACCOUNT unLOCK;
+
+grant create session to ADMMUELLERM ;
+grant execute on pmu.pkg_admin to ADMMUELLERM ;
+grant execute on pmu.pkg_log to ADMMUELLERM ;
+grant execute on pmu.pkg_main to ADMMUELLERM ;
+ALTER USER ADMMUELLERM DEFAULT ROLE ALL;

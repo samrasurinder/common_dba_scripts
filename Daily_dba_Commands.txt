@@ -1,0 +1,1936 @@
+***********
+Unmount CIFS
+==============
+umount -t -a cifs
+
+Mout the FS:-(/infshare)
+Uncomment in :- cat /etc/fstab
+mount /dev/emcpoweraq1        
+
+****************
+*** to run a script in background:-
+^z     then bg
+******************************
+*****Windows:-
+How to add a user in ORA_DBA group:- start->Administrative tools -> Server Manager -> configurations -> local user and groups -> Groups 
+-> click on ORA_DBA -> click ADD ->enter qnet\kd8546 -> check names
+
+Windows Doc:-<O:\JMitchell_grp\BCSSI DBA Group\Oracle_software\windows\12.1.0.2> 
+Ops-DBA team:- O:\JMitchell_grp\Documentation_Project_OPS_DBA\Staging and Cloning GI Home
+****************************************************************
+Bapanna Web Meeting:-  https://qualitynet.webex.com/join/maliba 
+
+********************************************
+Sharepoint:- Patching Doc:- http://vqnpmt29/mid-tier/Ops_team/SitePages/Home.aspx
+                            http://vqnpmt29/mid-tier/Ops_team/SitePages/Home.aspx?InitialTabId=Ribbon%2EDocument&VisibilityContext=WSSTabPersistence
+
+Keep the regular SOP’s here: http://vqnpmt29/mid-tier/Ops_team/SitePages/Home.aspx
+
+The NOC SOP’s go here: http://vqnpmt29/mid-tier/Ops_team/NOC%20SOPs/Forms/AllItems.aspx
+   
+   OPS-DBA Team:- http://vqnpmt29/mid-tier/Ops_team/Ops%20DBA%20Team/Home.aspx
+
+****************************************************************
+*** top ********
+:- Location on a Unix server
+
+/admin/tools/top/bin/top
+************************
+set feed off ver off echo off term off pages 0 trims on
+*******************************
+**Serena SDA URL
+
+https://sdaalm.hcqis.org:8443/serena_ra/app#/management/applications
+
+https://sdaalm.hcqis.org:8443/serena_ra/app#/application/93fca1ca-c31b-4c65-8b55-5838ee87d60b/activity
+Doc:-
+O:\JMitchell_grp\BCSSI Middleware Group\MW_SDPS\Documentation\Serena_setup
+Doc:-
+O:\JMitchell_grp\BCSSI DBA Group\Automated Deployments\SDA_v6-1_DBA_Steps.docs
+******************************
+IMS (Grant access) group name= QNETSupport-ESRD <qnetsupport-esrd@hcqis.org>
+******************************
+export EDITOR=/usr/bin/vi   <-- if crontab -e doesnot open a file.
+ps -elf | egrep "PID|d.bin|ohas|oraagent|orarootagent|cssdagent|cssdmonitor" | grep -v grep
+*****************************
+DB interface connectivity:-
+sqlplus ssamra_dba/xxxxxxxx@itznap07-db:1525/IFAVREP1
+******************
+Bloom Prooning:
+alter session set "_bloom_pruning_enabled"=FALSE; 
+/*+ OPT_PARAM('_bloom_pruning_enabled', FALSE) */
+
+or apply the patch.
+************
+TAR:-
+cd /u01/app/oracle/product/10.2.0 lsdsk|
+tar -cvpf /tmp/source.tar . 
+Untar:-
+cd /u01/app/oracle/product/10.2.0 
+tar -xvpf /tmp/source.tar 
+
+
+************************************************************
+set line 200
+col path for a65
+col name for a22
+select name,path,os_mb,header_status from v$asm_disk where header_status <> 'MEMBER' order by os_mb,path;
+
+set line 200
+col path for a65
+col name for a22
+select name,path,os_mb,header_status from v$asm_disk order by name,path;
+
+set line 200
+col path for a45
+col name for a22
+select name,path,os_mb,header_status from v$asm_disk order by os_mb,path;
+
+set line 200
+set pagesize 99
+col DISK_GROUP_NAME for a30
+col DISK_FILE_PATH for a55
+SELECT
+    NVL(a.name, '[CANDIDATE]')      disk_group_name
+  , b.path                          disk_file_path
+  , b.name                          disk_file_name
+  , b.failgroup                     disk_file_fail_group
+FROM
+    v$asm_diskgroup a RIGHT OUTER JOIN v$asm_disk b USING (group_number)
+ORDER BY
+    a.name;
+
+
+set line 200
+col path for a45
+col name for a22
+select name,path,os_mb,header_status from v$asm_disk  order by  name,os_mb,path;
+**************************************************
+**FRA
+
+select 
+SPACE_LIMIT/1024/1024 SPACE_LIMIT_MB,
+SPACE_USED/1024/1024 SPACE_USED_MB,
+SPACE_RECLAIMABLE/1024/1024 SPACE_RECLAIMABLE_MB,
+(SPACE_USED/SPACE_LIMIT) * 100 "% Used",
+(SPACE_LIMIT - SPACE_USED)/1024/1024 "Free Space_MB"
+from v$recovery_file_dest;
+
+
+*************************************
+set line 200
+col file_name for a65
+select file_name,bytes/(1024*1024*1024),maxbytes/(1024*1024*1024) ,autoextensible from dba_data_files where tablespace_name='SYSAUX';
+
+select segment_name,sum(bytes)/(1024*1024*1024) from dba_segments where tablespace_name='SYSAUX' group by segment_name order by 2 desc;
+**************************
+*** netstat **
+ netstat -an | grep 1525 | wc -l    <--- Find no connections connected to the server
+
+
+**************************************************
+***** asmcmd ****
+asmcmd lsdg
+asmcmd lsdsk --candidate -k
+asmcmd lsdsk -k | grep DATADG_PQRPQA01 <-- Devices belongs to a Diskgroup.
+asmcmd lsdsk -k|grep DATADG_PQDWVV
+
+asmcmd lsdsk -k|grep emcpower22[4-6][0-9]a|sort -k 9
+asmcmd lsdsk -k --candidate|grep emcpower22[4-6][0-9]a
+
+*** kfod***
+Check devices associated to diskgroups:-
+$ kfod status=TRUE asm_diskstring='/dev/rdsk/emcpower*a' disk=all dscvgroup=TRUE
+
+$ORACLE_HOME/bin/kfod disks=all op=disks
+
+$ORACLE_HOME/bin/kfod status=TRUE asm_diskstring='/dev/rdsk/*' disk=all dscvgroup=TRUE
+$ORACLE_HOME/bin/kfod status=TRUE asm_diskstring='/dev/rdsk/emcpower*a' disk=all dscvgroup=TRUE
+
+$ORACLE_HOME/bin/kfod status=TRUE asm_diskstring='/dev/rdsk/emcpower*a' disk=all dscvgroup=TRUE
+
+$ORACLE_HOME/bin/kfod status=TRUE disk=all dscvgroup=TRUE group=FRADG
+## read a disk header
+$ORACLE_HOME/bin/kfed read /dev/rdsk/emcpower2005a
+## kfod location before binaries install. kfod comes with GI binaries.
+[oracle@localhost grid]$ ./stage/ext/bin/kfod disks=all op=disks
+
+
+*** 
+
+ASM -- Add database to ASM
+srvctl remove database -d rdolts03
+
+srvctl add database -d rdolts03 -o /app/u01/oracle/product/11.2.0 -y AUTOMATIC -s open
+srvctl start database -d rdolts03
+
+{+ASM}@itqndb16:/export/home/oracle > srvctl remove database -d testdb01
+Remove the database testdb01? (y/[n]) y
+
+{+ASM}@itqndb16:/export/home/oracle > srvctl add database -d avolpr01 -o /app/u01/oracle/product/11.2.0.3 -y AUTOMATIC -s open
+
+srvctl add database -d $ORACLE_SID -o $ORACLE_HOME -y AUTOMATIC -s open
+srvctl start database -d $ORACLE_SID
+
+Add Instance:-
+srvctl add instance -d qmolpr01 -i qmolpr011 -n pdendb03
+srvctl add instance -d qmolpr01 -i qmolpr012 -n pdendb04
+
+oracle@pdqndb02# srvctl config service -d cldwpr01
+oracle@pdqndb02# srvctl status service -d cldwpr01
+
+srvctl upgrade database -d rmolvv03 -o /app/u01/oracle/product/11.2.0.3
+srvctl upgrade database -d crolvv12 -o /app/u01/oracle/product/11.2.0.3
+
+oracle@pdqndb02# srvctl config service -d sdolpr01
+oracle@pdqndb02# srvctl status service -d sdolpr01
+srvctl config service -d qnolif01|egrep '^(Preferred|Available|Service name)'
+
+ASM - INSTANCE
+{qmolif012}@itendb04:/export/home/oracle > srvctl stop instance -d qmolif01 -i qmolif012 -o immediate;
+{qmolif012}@itendb04:/export/home/oracle > srvctl start instance -d qmolif01 -i qmolif012
+{qmolif012}@itendb04:/export/home/oracle > ps -eaf|grep -i pmon|grep qmol
+
+
+*** Disk Group
+{+ASM}@tsendb05:/export/home/oracle > srvctl remove diskgroup -g DATADG_DUPLICATE
+                                                              -g diskgroup_name Disk group name
+                                                              -f Force. Removes the disk group even if files are open on it.
+*** Add Listener:-
+
+srvctl add listener -l LISTENER_IFAVREP1 -o /app/oracle/product/10.3.0/av_1 -p 1525
+srvctl remove listener [-l listener_name] [-a] [-f]
+                          -l listener_name Name of the listener that you want to remove. If omitted, then the default is LISTENER.
+                          -a Remove all listeners
+                          -f Force. Removes the listener even if databases are using it.
+
+srvctl config database -d qiolvv02
+srvctl status database -d qiolvv02
+
+
+crsctl check crs
+crsctl check has
+crsctl check cluster
+crsctl query css votedisk
+
+ oracle@dvqndb10# srvctl add asm
+oracle@dvqndb10# crs_start ora.asm
+
+oracle@dvqndb10# srvctl add listener -l ORCL_LSNR_SRVC -p 1525 -o /app/u01/oracle/grid_infra_home/product/11.2.0
+                 srvctl add listener -l ORCL_LSNR_SRVC -p 1525 -o /app/oracle/product/10.3.0/av_1
+                 [grid@hrvlprddb7603 admin]$ srvctl add listener -l LISTENER -o /u02/app/19.3.0/grid -p 1521
+                 [grid@hrvlprddb7603 admin]$ lsnrctl start LISTENER
+**stop listener then remove
+srvctl remove listener -l LISTENER
+
+srvctl add database -d testdb05 -o /app/u01/oracle/product/11.2.0 -y AUTOMATIC -s open
+srvctl start database -d testdb05
+
+srvctl add database -d testdb06 -o /app/u01/oracle/product/11.2.0 -y AUTOMATIC -s open
+srvctl start database -d testdb06
+
+*** Add RAC database:-
+{qmolif011}@itendb03:/export/home/oracle > srvctl add database -d qmolif01 -o /app/u01/oracle/product/11.2.0.3 -y AUTOMATIC -s open
+{qmolif011}@itendb03:/export/home/oracle > srvctl add instance -d qmolif01 -i qmolif011 -n itendb03
+{qmolif011}@itendb03:/export/home/oracle > srvctl add instance -d qmolif01 -i qmolif012 -n itendb04
+{qmolif011}@itendb03:/export/home/oracle > srvctl start database -d qmolif01
+
+RAC ALOLIF03 database:-
+{alolif031}@itendb03:/export/home/oracle > srvctl add database -d alolif03 -o $ORACLE_HOME -p +DATADG_ALOLIF03/alolif03/parameterfile/spfile.277.907169641 
+{alolif031}@itendb03:/export/home/oracle > srvctl add instance -d alolif03 -i alolif031 -n itendb03
+{alolif031}@itendb03:/export/home/oracle > srvctl add instance -d alolif03 -i alolif032 -n itendb04
+{alolif031}@itendb03:/export/home/oracle > srvctl start database -d alolif03
+
+
+*************************************************
+** SCAN LISTENER **
+oracle@tsqndb01# srvctl status scan_listener
+SCAN Listener LISTENER_SCAN1 is enabled
+SCAN listener LISTENER_SCAN1 is not running
+SCAN Listener LISTENER_SCAN2 is enabled
+SCAN listener LISTENER_SCAN2 is running on node tsqndb03
+SCAN Listener LISTENER_SCAN3 is enabled
+SCAN listener LISTENER_SCAN3 is running on node tsqndb03
+
+srvctl start scan_listener -i 1 -n tsqndb01
+
+oracle@tsqndb01# srvctl status scan_listener
+SCAN Listener LISTENER_SCAN1 is enabled
+SCAN listener LISTENER_SCAN1 is running on node tsqndb01
+SCAN Listener LISTENER_SCAN2 is enabled
+SCAN listener LISTENER_SCAN2 is running on node tsqndb03
+SCAN Listener LISTENER_SCAN3 is enabled
+SCAN listener LISTENER_SCAN3 is running on node tsqndb03
+
+alter system set local_listener='(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=172.19.24.203)(PORT=1525))))' scope=both sid='qmolif011';
+alter system set remote_listener='(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCPS)(HOST=172.19.24.207)(PORT=1523))(ADDRESS=(PROTOCOL=TCPS)(HOST=172.19.24.27)(PORT=1523))(ADDRESS=(PROTOCOL=TCPS)(HOST=172.19.24.206)(PORT=1523)))' scope=both sid='*';
+alter system set local_listener='(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=172.19.24.204)(PORT=1525)))) scope=both sid='qmolif012';
+
+**********************************************************
+
+*** Listener:-
+srvctl config listener
+{+ASM}@vvavad01:/app/u01/grid_infra_home/product/11.2.0.3/network/admin > srvctl stop listener -l ORCL_LSNR_SRVC
+{+ASM}@vvavad01:/app/u01/grid_infra_home/product/11.2.0.3/network/admin > srvctl remove listener -l ORCL_LSNR_SRVC
+{+ASM}@vvavad01:/app/u01/grid_infra_home/product/11.2.0.3/network/admin > srvctl add listener -l ORCL_LSNR_SRVC -p 1525 -o $ORACLE_HOME
+{+ASM}@vvavad01:/app/u01/grid_infra_home/product/11.2.0.3/network/admin > srvctl start listener -l ORCL_LSNR_SRVC
+*************************************************************************
+***MERGE Table***
+
+select * from sysadm.psoprdefn
+minus
+select * from sysadm.psoprdefn_20191107_bkp
+
+MERGE INTO sysadm.psoprdefn a 
+USING sysadm.psoprdefn_20191107_bkp b
+ON (a.oprid = b.oprid)
+    WHEN MATCHED THEN
+        UPDATE SET a.acctlock = b.acctlock;
+
+************************************
+Datasource information from App as follows
+
+Host: sdpstestcl-scan
+Port:1525
+Service name: esdmqa01
+
+For example, if you’re using java thin driver, your datasource should look like as follows:
+
+Scan listener:-
+jdbc:oracle:thin:@//sdpstestcl-scan:1525/esdmqa01
+
+service connectivity:-
+
+jdbc:oracle:thin:@dvqndb04-vip.sdps.org:1525/decc_SDOL_prs_srvc
+
+Thanks
+Alpoor Reddy
+****************************************
+DB interface connectivity check:- Tested from  c2rau28 box.
+
+sqlplus ssamra_dba/Batalats01#@tsendb05-db:1525/avolts02
+
+***********************
+***DISK GROUP**********
+*** Raw device size by Fernando:- prtvtoc /dev/rdsk/emcpower2108a | awk '/^ *0 / {print int($5/2/1024)}' 
+                                  prtvtoc /dev/rdsk/emcpower2299a | awk '$2 == "4" && $3 == "00" && $4 == "34" {print int($5/2/1024)}'
+
+*** Raw device size:- prtvtoc /dev/rdsk/emcpower2038a | awk '/^*0/{print int($5/2/1024)}'********
+***Create Disk group:-
+CREATE DISKGROUP FRADG_NEW04 EXTERNAL REDUNDANCY DISK '/dev/rdsk/emcpower2010a' ATTRIBUTE 'au_size'='1M','compatible.asm' = '11.2' ,'compatible.rdbms'='11.2';
+
+ALTER  DISKGROUP DATADG_PQDWTS03 ADD DISK '/dev/rdsk/emcpower2011a';
+
+Drop diskgroup:-
+Forcing
+WARNING: ALL DATA WILL BE LOST! MAKE SURE YOU HAVE BACKUPS!
+
+Luckally one is able to force this all…
+
+SQL> alter diskgroup data dismount force;
+SQL> drop diskgroup data force including contents;
+Diskgroup dropped.Gone!
+
+SQL> alter diskgroup DATADG_QIOLIF01
+        add disk '/dev/rdsk/emcpower47g' size 537591 M,
+                 '/dev/rdsk/emcpower48g' size 537591 M
+        drop disk DATADG_QIOLIF01_0000,
+                  DATADG_QIOLIF01_0001,
+                  DATADG_QIOLIF01_0003,
+                  DATADG_QIOLIF01_0004,
+                  DATADG_QIOLIF01_0005,
+                  DATADG_QIOLIF01_0006,
+                  DATADG_QIOLIF01_0007,
+                  DATADG_QIOLIF01_0008
+        rebalance power 4
+/
+*****************************
+**log member***
+set line 200
+col MEMBER for a65
+select a.thread#,a.group#,b.MEMBER,a.bytes/(1024*1024),a.status from v$log a ,v$logfile b where a.group#=b.group# order by group#;
+
+alter database drop logfile group 1 ;
+alter database add logfile group 1 ('+DATADG_RDOLTS03','+DATADG_RDOLTS03') size 100M reuse; 
+
+alter system archive log current ;
+alter system switch logfile ;
+alter system archive log current ;
+alter database rename file '+DATADG_CRRPPR01/crrppr01/onlinelog/group_1.280.815696819' to '+DATADG_CRRPUA01/crrpua01/onlinelog/group_1b.log'; 
+
+**********************************
+Database Parameters:-
+
+COLUMN property_name FORMAT A30
+COLUMN property_value FORMAT A30
+COLUMN description FORMAT A50
+SET LINESIZE 200
+
+SELECT *
+FROM database_properties
+WHERE property_name like '%TABLESPACE';
+
+SELECT * FROM NLS_DATABASE_PARAMETERS;
+SELECT value$ FROM sys.props$ WHERE name = 'NLS_CHARACTERSET' ; 
+
+SELECT * FROM NLS_DATABASE_PARAMETERS where parameter like '%CHARACTERSET%';
+
+set line 200
+col NAME for a35
+col COMMENT$ for a45
+col VALUE$ for a45
+SELECT * from sys.props$ WHERE name like '%CHARACTERS%';
+************************************
+Change database Characterset -- Once the database is empty.
+
+alter system set nls_length_semantics=CHAR scope=both;
+
+shutdown;
+startup restrict;
+alter database character set INTERNAL_USE WE8ISO8859P1;
+shutdown;
+startup;
+*********************************************
+
+Find Database Version
+
+COL PRODUCT FORMAT A40
+COL VERSION FORMAT A15
+COL STATUS FORMAT A15
+SELECT * FROM PRODUCT_COMPONENT_VERSION;
+
+*********************************************
+Database Health Monitor:-
+SELECT DBMS_HM.GET_RUN_REPORT('db_failure_check') FROM DUAL;
+
+https://yasinyazici.wordpress.com/2014/03/04/health-check/
+*********************************************************
+*** Rename a Datafile 12c ***
+
+***Relocating a datafile
+
+
+SQL> ALTER DATABASE MOVE DATAFILE '/u01/oradata/DBTEST/demo01.dbf' TO '/u02/oradata/DBTEST/demo01.dbf';
+
+
+*********************************************
+Database Memory check:-
+select COMPONENT,CURRENT_SIZE from V$MEMORY_DYNAMIC_COMPONENTS;
+
+select PARAMETER,OPER_TYPE,INITIAL_SIZE,TARGET_SIZE,FINAL_SIZE,STATUS,
+to_char(start_time,'yyyymmdd hh24:mi:ss'),to_char(end_time,'yyyymmdd hh24:mi:ss') 
+from V$MEMORY_RESIZE_OPS order by to_char(start_time,'yyyymmdd hh24:mi:ss');
+
+*************************************************************
+ Turn on SQL_TRACE for a session:-
+
+ALTER SYSTEM SET timed_statistics = true;
+execute dbms_system.set_sql_trace_in_session(702, 581, true);
+********************************************************
+
+alter session set nls_date_format='mm/dd/yyyy';
+*******************************************
+-- Change archive destination temporary
+alter system set log_archive_dest_1='location=/app/u06/exp/cldwvv02';
+alter system switch logfile;
+*******************************************
+sqlplus -prelim "/as sysdba"
+*******************************************
+---> Histogram -- rdolpr databases
+analyze table aradmin.t105 compute statistics for all columns;
+alter table ARADMIN.T2116 cache;
+*******************************************
+--Clufy
+It has to run from $CRS_HOME/bin
+
+./cluvfy stage -pre crsinst -n pdqndb02,pdqndb03 -verbose
+*********************************************
+** Enable remote login
+orapwd file=orapwcrolpr99 password=I#PZJ6ei5 entries=20
+SQL> ALTER SYSTEM SET REMOTE_LOGIN_PASSWORDFILE=EXCLUSIVE SCOPE=SPFILE;
+SQL>ALTER SYSTEM SET O7_DICTIONARY_ACCESSIBILITY=TRUE SCOPE=SPFILE;
+SQL> GRANT SYSDBA, SYSOPER TO HR;
+select * from v$pwfile_users;
+********************************************************
+[?9/?6/?2019 2:51 PM]  Reddy, Alpoor:  
+alter profile HR_PROFILE_PSOFT LIMIT PASSWORD_REUSE_TIME unlimited;
+alter profile HR_PROFILE_PSOFT LIMIT PASSWORD_REUSE_MAX UNLIMITED;
+alter profile HR_PROFILE_PSOFT LIMIT password_verify_function NULL; 
+
+[?9/?6/?2019 2:56 PM]  Reddy, Alpoor:  
+alter profile HR_PROFILE_PSOFT LIMIT PASSWORD_REUSE_TIME 365;
+alter profile HR_PROFILE_PSOFT LIMIT PASSWORD_REUSE_MAX UNLIMITED;
+alter profile HR_PROFILE_PSOFT LIMIT password_verify_function HR_PSOFT_VERIFY_PASSWORD; 
+ 
+
+
+[?9/?6/?2019 2:51 PM]  Reddy, Alpoor: 
+ 
+alter profile HR_PROFILE LIMIT PASSWORD_REUSE_TIME unlimited;
+alter profile HR_PROFILE LIMIT PASSWORD_REUSE_MAX UNLIMITED;
+alter profile HR_PROFILE LIMIT password_verify_function NULL; 
+ 
+
+alter profile HR_PROFILE LIMIT PASSWORD_REUSE_TIME unlimited;
+alter profile HR_PROFILE LIMIT PASSWORD_REUSE_MAX UNLIMITED;
+alter profile HR_PROFILE LIMIT password_verify_function VERIFY_PASSWORD; 
+***************************************************************
+*** db_link**
+set line 200
+set pagesize 999
+col owner for a18
+col DB_LINK for a45
+col USERNAME for a35
+col HOST for a35
+select * from dba_db_links order by owner,db_link;
+
+select 'select * from global_name@'||DB_LINK||';' from user_db_links;
+
+ALTER DATABASE LINK JOHN connect to USER identified by  PASSWORD;
+
+
+/*+ Are you creating it on your own db account?
+
+Try this and you won’t need a tnsnames entry:
+
+CREATE DATABASE LINK crolpr02
+CONNECT TO MMARNHOLTZ IDENTIFIED BY &dbl_pw
+USING '(DESCRIPTION = (ADDRESS = (PROTOCOL = TCP)(HOST = crolpr02_db)(PORT = 1525)) (CONNECT_DATA = (SID = crolpr02)))'
+*/
+
+
+
+*************************************************
+select a.user#,a.name,b.password,b.PASSWORD_DATE from user$ a, user_history$ b
+   where a.user# = b.user# and
+   a.name in ('CROWN')  order by 4 desc;
+
+******************************
+set sqlprompt "_USER'@'_CONNECT_IDENTIFIER _PRIVILEGE> "
+******************************
+-- Check Gridcontrol agent
+   ./emctl status agent
+   ./emctl stop agent
+**************************************************
+us 
+alter table sys.aud$ move tablespace AUDIT_TABLESPACE;
+select owner,table_name,tablespace_name from dba_tables where table_name='AUD$';
+
+*************************************************
+spool dblink_log.log
+col host_name for a45
+select instance_name,host_name from v$instance;
+show user
+**********************************************
+-- Date and time
+select to_char(sysdate, 'Dy DD-Mon-YYYY HH24:MI:SS') as "Current Time"
+from dual;
+*************************************************
+Refresh Materilaized view
+execute dbms_mview.refresh('CASE_SELECTION_REPORT_MV');
+**************************************************
+-- Extract USER DDL
+
+ SELECT DBMS_METADATA.GET_GRANTED_DDL('ROLE_GRANT','CDAVIS') FROM DUAL;
+
+ SELECT DBMS_METADATA.GET_GRANTED_DDL('SYSTEM_GRANT','CDAVIS') FROM DUAL;
+
+ SELECT DBMS_METADATA.GET_GRANTED_DDL('OBJECT_GRANT','CDAVIS') FROM DUAL;
+
+-- Extract Tables DDL
+set long 100000
+select DBMS_METADATA.GET_DDL('TABLE','<<TABLE_NAME>>','<<OWNER>>') from DUAL;
+
+set long 100000
+select DBMS_METADATA.GET_DDL('TABLE','ERROR_CLASS','ERR_HANDLER_APP') from DUAL;
+
+
+-- Extract Tablespace DDL
+-- For all tablespaces
+set heading off;
+set echo off;
+Set pages 999;
+set long 90000;
+col host_name for a35
+
+spool Tablespaces_ddl_list.sql
+select 'Database='||instance_name,'Box='||host_name from v$instance;
+select dbms_metadata.get_ddl('TABLESPACE',tb.tablespace_name) from dba_tablespaces tb;
+spool off
+-- for some tablespaces
+select dbms_metadata.get_ddl('TABLESPACE',tb.tablespace_name) from dba_tablespaces tb
+where tb.tablespace_name like 'PART_B_FACT_2002%';
+
+set line 260
+  setpagesize 9999
+  spool cr_qctr_users.sql
+  select 'create user '||a.username||' identified by values '||''''||b.password||''''||' default tablespace '||DEFAULT_TABLESPACE||'
+  temporary tablespace '||TEMPORARY_TABLESPACE ||' profile '||a.profile||';'
+  from dba_users a,user$ b where a.user_id=b.user# 
+  and a.username not in ('SYS','SYSTEM','MDSYS','XDB','WMSYS') order by a.username;
+  spool off;
+  spool cr_grant_tbs.sql
+  select 'GRANT UNLIMITED TABLESPACE to '||username ||';' from dba_users 
+  where username not in ('SYS','SYSTEM','MDSYS','XDB','WMSYS') order by username;
+  spool off;
+*********************************************
+** Grant All Schema objects ***
+PROCEDURE GRANT_TABLES
+   IS
+   BEGIN
+
+      FOR tab IN (SELECT table_name
+                  FROM   all_tables
+                  WHERE  owner = this_user) LOOP
+         EXECUTE IMMEDIATE 'GRANT SELECT, INSERT, UPDATE, DELETE ON '||tab.table_name||' TO other_user';
+      END LOOP;
+   END;
+*** or
+BEGIN
+
+  FOR x IN (SELECT owner||'.'||table_name ownertab
+            FROM   all_tables
+            WHERE  owner IN ('A', 'B', 'C', 'D'))
+  LOOP
+    EXECUTE IMMEDIATE 'GRANT SELECT ON '||x.ownertab||' TO other_user';
+  END LOOP;
+END;
+*** QIMS
+select 'GRANT '||privilege||' ON '||owner||'.'||table_name||' TO '||GRANTEE||';' from dba_tab_privs where grantee in ('CDS','QUALITYNET');
+select 'GRANT '||privilege||' TO '||grantee||';' from dba_tab_privs where grantee in ('CDS','QUALITYNET');
+
+********************************************************
+*** Database Properties
+COLUMN property_name FORMAT A30
+COLUMN property_value FORMAT A30
+COLUMN description FORMAT A50
+SET LINESIZE 200
+
+SELECT *
+FROM database_properties
+WHERE property_name like '%TABLESPACE';
+*******************************************************
+*** Alter user fild hash value****
+
+set long 150
+set linesize 150
+set longchunksize 150
+select 'alter user '||username||' identified by values '||REGEXP_SUBSTR(DBMS_METADATA.get_ddl ('USER',USERNAME), '''[^'']+''')||';' from dba_users
+/
+********************************************************************************
+*** Check database connection *********
+22) Check connectivity to both interfaces. Use EZConnect to test -db interfaces, OEM will confirm -mgt.
+ 
+ Non-RAC: sqlplus -L user/password@<database name>_db:1525/<database_name>
+ Non-RAC, no CNAME: sqlplus -L user/password@`hostname`-db:1525/<database_name>
+ RAC: sqlplus -L user/password@<scan listener name>:1525/<database_name>
+
+****************************************************************************
+-- Space used and max available
+select TABLESPACE_NAME,sum(BYTES)/(1024*1024*1024), sum(MAX_BYTES)/(1024*1024*1024)
+from dba_ts_quotas where USERNAME='HA633661' group by tablespace_name;
+
+select USERNAME,tablespace_name ,MAX_BYTES/(1024*1024*1024) "Space Available(GB)" from dba_ts_quotas
+where TABLESPACE_NAME='COMP_DATA' and username='CC935130';
+
+
+--- Datafile resize
+
+ALTER DATABASE DATAFILE '/u02/oracle/rbdb1/stuff01.dbf'
+   RESIZE 100M;
+--RAC--sessions--
+select unique 'alter system kill session ' ||'''' ||  sid ||''  || ',' ||  serial#||',@'||inst_id||''''||';' 
+from gv$session where schemaname in ('HRONLINE');
+
+select unique 'alter system kill session ' ||'''' ||  sid ||''  || ',' ||  serial#||',@'||inst_id||''''||';' 
+from gv$session where schemaname in ('RANEYKW1');
+
+select 'alter system kill session'||''''||sid||','||serial#||''''||' immediate;' from v$session where username like 'EOPF' and status ='INACTIVE';
+
+select 'alter system kill session'||''''||sid||','||serial#||''''||' immediate;' from v$session where username like 'HRONLINE' and status ='INACTIVE';
+
+
+select 'alter system kill session'||''''||sid||','||serial#||''''||';' from v$session
+where username is not null and username not like '%SYS%';
+
+** Kill session on RAC
+SQL> SELECT SID, SERIAL#, INST_ID FROM GV$SESSION WHERE USERNAME='SCOTT';
+ 
+       SID    SERIAL#    INST_ID
+---------- ---------- ----------
+        80          8          2
+ 
+SQL> ALTER SYSTEM KILL SESSION '80, 8, @2' IMMEDIATE;
+System altered.
+
+SELECT segment_name,SUM(bytes)/(1024*1024*1024) "Size(GB)" FROM dba_segments
+WHERE owner ='NXTAPPO' AND segment_name IN ('CONTRACT','SERVICE_AGREEMENT','SUBSCRIBER')
+GROUP BY segment_name
+
+*** KILL sessions in LOOP ****
+-- Script to kill all sessions of a user in Oracle.
+ BEGIN
+  FOR r IN (select sid,serial# from v$session where username = 'USER')
+  LOOP
+    EXECUTE IMMEDIATE 'alter system kill session ''' || r.sid || ',' || r.serial# || '''';
+  END LOOP;
+END;
+*********
+Create TABLESPACE:-
+CREATE TABLESPACE "AUDIT_TABLESPACE" DATAFILE '+DATADG_QCTRVV03' size 100M autoextend on MAXSIZE UNLIMITED
+    EXTENT MANAGEMENT LOCAL SEGMENT SPACE MANAGEMENT AUTO;
+
+Drop tablespaces:-
+
+drop tablespace DWPSHISTLN_DATA including contents and DATAFILES;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ALTER SYSTEM
+
+alter system set processes=6000 scope=spfile sid='*';  <-- RAC database*****
+
+alter system set cursor_space_for_time=FALSE scope=spfile;
+
+alter system reset some_param scope=both sid='*';
+scope
+scope=memory
+Changes the parameter's value for the running instance only. As soon as the instance is stopped and started, this change will be lost. 
+scope=spfile
+Alters an initialization parameter in the spfile 
+scope=both
+Alters an initialization parameter in the spfile as well as in the running instance. 
+
+ALTER SYSTEM SET QUERY_REWRITE_ENABLED = TRUE SCOPE = BOTH;
+ALTER SYSTEM SET QUERY_REWRITE_INTEGRITY = TRUSTED SCOPE = BOTH;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+SELECT username, schemaname, osuser, status, machine
+FROM gv$session;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Get_pid
+
+select s.username, s.sid, s.serial#, p.pid, p.spid, p.program, s.username
+  from v$process p, v$session s
+  where p.ADDR=s.paddr
+  AND s.username= upper('DWPC')
+***************************************************
+Get_explain_plan
+
+set line 200    <-- for better format. Do not forget.
+SET AUTOT TRACE EXP STAT
+explain plan for
+select * from emp;
+
+select * from table(DBMS_XPLAN.display());
+select * from table(dbms_xplan.display(null, null, 'advanced')); 
+
+**********************************************************
+Compile objects in PARALLEL:-
+
+exec sys.utl_recomp.recomp_parallel(16);
+******************
+Analyze:-
+
+-- ANALYZE DATABASE
+--exec dbms_stats.gather_database_stats(options=> 'GATHER AUTO');
+
+dbms_stats.gather_table_stats('PUBLIC_REPORTING_CONFIG', 'RAW_DATA', degree=>8);
+select dbms_sqltune.report_sql_monitor(sql_id => '9smh17qmwb2bb', type => 'text') from dual;
+
+EXEC DBMS_UTILITY.analyze_schema('SCOTT','COMPUTE') --> Schema level
+EXEC DBMS_STATS.gather_schema_stats('SCOTT', estimate_percent => 1);
+
+EXECUTE DBMS_STATS.GATHER_SCHEMA_STATS('PQRIRDSR_2009',DBMS_STATS.AUTO_SAMPLE_SIZE);
+
+
+
+ANALYZE TABLE orc VALIDATE STRUCTURE CASCADE; 
+
+EXECUTE DBMS_STATS.GATHER_TABLE_STATS(ownname=>'CXPODSADM', tabname=>'ODS_MTM_PRIVCLASS8_WEB_OBJECT0', estimate_percent=>3, cascade=>true, degree=>8);
+EXEC DBMS_STATS.GATHER_TABLE_STATS (ownname => 'ESRD_QIP', tabname => 'PTNT_CLNCL_DATA' , ESTIMATE_PERCENT=>DBMS_STATS.AUTO_SAMPLE_SIZE, DEGREE =>64);
+EXECUTE DBMS_STATS.GATHER_TABLE_STATS(ownname => 'ARADMIN', tabname => 'ODS_TABLE_ACT_ENTRY', estimate_percent => .01, cascade => true, degree => 8);
+
+select 'EXECUTE DBMS_STATS.GATHER_TABLE_STATS(ownname=>'||''''||'AVSYS'||''''||', tabname=>'||''''||table_name||''''||','||' estimate_percent=>10, cascade=>true, degree=>8);' from dba_tables where owner='AVSYS' order by 1;
+begin
+dbms_stats.gather_schema_stats(ownname => 'ARADMIN',degree => 8,estimate_percent => .01,cascade => TRUE );
+end;
+/
+EXEC DBMS_STATS.delete_database_stats;
+EXEC DBMS_STATS.delete_schema_stats('SCOTT');
+EXEC DBMS_STATS.delete_table_stats('SCOTT', 'EMPLOYEES');
+EXEC DBMS_STATS.delete_index_stats('SCOTT', 'EMPLOYEES_PK');
+
+*** Dicionary stats only (SYS objects only) ***
+13:42:11 SYS@hadwpr01> EXEC DBMS_STATS.GATHER_DICTIONARY_STATS;
+
+PL/SQL procedure successfully completed.
+***************************************************************
+
+*** procedureto gather stats***
+create or replace procedure esrd_qip.ESRD_QIP_STAT
+is
+begin
+dbms_stats.gather_schema_stats(ownname=>'ESRD_QIP', estimate_percent => dbms_stats.auto_sample_size,NO_INVALIDATE => FALSE,CASCADE=> TRUE,degree=> SYS.DBMS_STATS.AUTO_DEGREE );
+end;
+
+*********************************************************
+Compile:- exec dbms_utility.compile_schema('QIMSORG'); <-- Execute as schema
+
+*******************
+Table commands
+CREATE TABLE jai.gg_tables_list_OLD
+(schema VARCHAR2(50),
+Table_name VARCHAR2(250),
+flag VARCHAR2(3));
+
+alter table jai.gg_tables_list drop primary key 
+
+rename GG_TABLES_LIST2 to GG_TABLES_LIST_nxtappo_NEW
+rename GG_TABLES_LIST3 to GG_TABLES_LIST_others_NEW
+
+drop table GG_TABLES_LIST_others_NEW
+
+ALTER TABLE JAI.gg_tables_list_OLD ADD (
+  CONSTRAINT gg_tables_list_old_PK1
+ PRIMARY KEY
+ (schema,Table_name)
+    USING INDEX 
+    TABLESPACE users)
+***********************************
+CREATE PFILE='?/dbs/initdbname.ora' FROM SPFILE='/dev/vx/rdsk/oracle_dg/dbspfile';
+
+**************
+MOVE
+alter table in_wrong_place move tablespace new_tablespace;
+
+If the table is partitioned, then you might need to move all the partitions, or just some of them using the following 8i command :
+
+	alter table in_wrong_place move partition part_wrong tablespace new_tablespace nologging;
+
+
+************************
+Transport_tablespaces
+The following statement can be used to determine whether tablespaces sales_1 and sales_2 are self-contained, with referential integrity constraints taken into consideration (indicated by TRUE).
+
+EXECUTE DBMS_TTS.TRANSPORT_SET_CHECK('sales_1,sales_2', TRUE);
+
+After invoking this PL/SQL package, you can see all violations by selecting from the TRANSPORT_SET_VIOLATIONS view. If the set of tablespaces is self-contained, this view is empty. The following example illustrates a case where there are two violations: a foreign key constraint, dept_fk, across the tablespace set boundary, and a partitioned table, jim.sales, that is partially contained in the tablespace set.
+
+SQL> SELECT * FROM TRANSPORT_SET_VIOLATIONS;
+
+VIOLATIONS
+---------------------------------------------------------------------------
+Constraint DEPT_FK between table JIM.EMP in tablespace SALES_1 and table
+JIM.DEPT in tablespace OTHER
+Partitioned table JIM.SALES is partially contained in the transportable set
+
+These violations must be resolved before sales_1 and sales_2 are transportable. As noted in the next step, one choice for bypassing the integrity constraint violation is to not export the integrity constraints.
+
+*****************************
+Partitions
+
+ALTER TABLE <table_name>
+TRUNCATE PARTITION <partition_name>; 
+CREATE TABLE parttab (
+state  VARCHAR2(2),
+sales  NUMBER(10,2))
+PARTITION BY LIST (state) (
+PARTITION northwest VALUES ('OR', 'WA') TABLESPACE uwdata,
+PARTITION southwest VALUES ('AZ', 'CA') TABLESPACE uwdata);
+
+INSERT INTO parttab VALUES ('OR', 100000);
+INSERT INTO parttab VALUES ('WA', 200000);
+INSERT INTO parttab VALUES ('AZ', 300000);
+INSERT INTO parttab VALUES ('CA', 400000);
+COMMIT;
+
+SELECT * FROM parttab PARTITION(northwest);
+SELECT * FROM parttab PARTITION(southwest);
+
+ALTER TABLE parttab
+TRUNCATE PARTITION southwest;
+
+SELECT * FROM parttab PARTITION(northwest);
+SELECT * FROM parttab PARTITION(southwest); 
+*******************************************************
+How to check the patches applied to the database.
+
+unix> cd $ORACLE_HOME/OPatch
+Run the following command
+unix> ./opatch lsinventory -detail > lsinventory.txt
+*******************************************************
+Run TKPROF
+
+/oracle/g01/software/rdbms/9.2.0.8/bin/tkprof storm_ndwdev_ora_8796.trc STORM_07222008A.PRF EXPLAIN=stormadm/storm_2008 SYS=NO SORT=EXECPU,FCHCPU
+*************************************
+**JOBS***
+This runs in 10g. Can be stopped with this command.
+
+EXEC DBMS_SCHEDULER.DISABLE('GATHER_STATS_JOB');
+execute dbms_scheduler.disable('SYS.GATHER_STATS_JOB', TRUE);
+
+*** force stop job
+begin
+      dbms_scheduler.stop_job('PRDMON.PRDMON_OPPS_QNOL_SUB_MON_JOB', force => true);
+end;
+/
+
+
+********************************************
+*******Setup a job***********
+********************************************
+********************************************************************
+DBA Jobs
+
+EXEC DBMS_JOB.BROKEN(52,TRUE);
+EXEC DBMS_JOB.BROKEN(52,FALSE);
+
+EXEC DBMS_JOB.BROKEN(7090963,TRUE);
+EXEC DBMS_JOB.BROKEN(5003245,TRUE);
+
+EXEC DBMS_JOB.BROKEN(7090963,FALSE);
+EXEC DBMS_JOB.BROKEN(5003245,FALSE);
+
+To force a job marked as broken, using the  DBMS_JOB.BROKEN statement, the following command can be used:
+
+EXEC DBMS_JOB.RUN(52);
+** Create a job:-
+------------
+begin
+ dbms_scheduler.create_job(
+   job_name => 'HCAHPS.HCAHPS_ETL_PROCESS_FLOW' 
+   ,job_type => 'PLSQL_BLOCK'
+   ,job_action => 'BEGIN hcahps.etl_process_pkg.a_etl_process_flow; END;'  
+   ,start_date => TRUNC(sysdate+1)+4/24
+   ,repeat_interval => 'FREQ=DAILY' 
+   ,enabled => TRUE
+   ,comments => 'Running HCAHPS ETL Process Flow');
+ end;
+/
+
+** Drop a job:-
+begin
+ dbms_scheduler.drop_job (
+ 'HCAHPS.HCAHPS_ETL_PROCESS_FLOW', true);
+end;
+/
+or
+variable jobno1 number;
+declare
+cursor c1 is select job from dba_jobs where what='hcahps.etl_process_pkg.a_etl_process_flow;';
+begin
+for v1 in c1 loop
+dbms_ijob.remove(v1.job);
+commit;
+end loop;
+end;
+/
+*** Change time interval
+begin
+  sys.dbms_job.submit(job => :job,
+                      what => 'np_sdps.rhqdapu_new_hsp;',
+                      next_date => to_date('29-05-2010 14:38:30', 'dd-mm-yyyy hh24:mi:ss'),
+                      interval => 'SYSDATE + 15/1440');
+  commit;
+end;
+/
+*** Time intervals
+Execute daily 'SYSDATE + 1' 
+Execute every 4 hours 'SYSDATE + 4/24' 
+Execute every 10 minutes 'SYSDATE + 10/1440' 
+Execute every 30 seconds 'SYSDATE + 30/86400' 
+Execute every 7 days 'SYSDATE + 7' 
+
+*******************************************************************
+Data pump Check
+---------------
+
+select * from v$datapump_job;
+select * from v$datapump_session;
+select * from v$session_longops;
+
+select to_char(sysdate,'YYYY-MM-DD HH24:MI:SS') "DATE", s.program, s.sid, s.status, s.username, d.job_name, p.spid, s.serial#, p.pid 
+from v$session s, v$process p, dba_datapump_sessions d where p.addr=s.paddr and s.saddr=d.saddr;
+
+select substr(sql_text,instr(sql_text,'into "'),30) table_name, 
+rows_processed, round((sysdate-to_date(first_load_time,'yyyy-mm-dd hh24:mi:ss'))*24*60,1) minutes,
+trunc(rows_processed/((sysdate-to_date(first_load_time,'yyyy-mm-dd hh24:mi:ss'))*24*60)) rows_per_minute 
+from 
+sys.v_$sqlarea 
+where 
+sql_text like 'insert %into "%' and command_type = 2 and open_versions > 0; 
+*********************************************************************
+-- orapwd
+$ORACLE_HOME/bin/orapwd file=orapwsdoliv01 password=oracle entries=20
+
+export pw="TSTRkG\$N9jq98Bo"
+$ORACLE_HOME/bin/orapwd file=orapwOPSUAT password=$pw entries=20
+
+*********************************************************************
+******* Compile Schema***********************************************
+exec dbms_utility.compile_schema(schema=>'HOPQDRP');
+*********************************************************************
+alias rs='cd $ORACLE_BASE/scripts/RMAN'
+alias sur='cd ~/sur'
+****************************
+-- Run SQL in a shell script
+
+sqlplus -s "/ as sysdba" << EOF
+CREATE or replace DIRECTORY custom_dp99 AS '/app/u06/dba/for_2.0';
+GRANT READ,WRITE ON DIRECTORY custom_dp99 TO system;
+EOF
+*****************************************
+select 'REVOKE '||GRANTED_ROLE||' from '||GRANTEE||' ;' from dba_role_privs where GRANTED_ROLE like '%DBA%'
+and grantee not in ('SYS','SYSTEM','SYSMAN','OPS$ORACLE','OLAPSYS','ORACLE','RCLEMENT','CFARR','DBA','WKSYS');
+********************************
+SEQUENCES:-
+
+alter sequence SQ_ABSTRACTION increment by 15296 nocache;
+select SQ_ABSTRACTION.nextval from dual;
+alter sequence SQ_ABSTRACTION increment by 1 cache 20;
+**********************************
+------Patches:-------
+************************************
+*** DBA_Registry***
+
+col ACTION_TIME for a30
+col ACTION for a20
+col NAMESPACE for a20
+col VERSION for a16
+col COMMENTS for a25
+col COMP_NAME for a35
+set line 200
+set pagesize 99
+select * from dba_registry_history order by action_time desc;
+  or
+set line 120
+select substr(comp_name,1,30) comp_name, substr(comp_id,1,10)
+comp_id,substr(version,1,12) version,status from dba_registry;
+
+select substr(comp_name,1,30) comp_name, 
+     substr(comp_id,1,10) comp_id,
+     substr(version,1,12) version,
+     status 
+     from dba_registry;
+
+*******************************************
+select 'alter DATABSE LINK '|| DB_LINK|| '
+  connect to '||USERNAME||' IDENTIFIED BY Monitor7#;'  from dba_db_links where username like 'MONITOR%'
+**********************************************
+** for VV from Alpoor******
+grant execute on shared_admin.pkg_show to MTatini,mrangegowda,LJose;
+**************************************************************
+*** To create spool file in a script ******
+column THENAME new_value PATCHNAME
+select 'ESRD_QIP_Initial_Deployment' THENAME from dual;
+
+column THEDATE new_value PATCHDATE
+select to_char(sysdate,'YYYYMMDD_HHMISS_AM') THEDATE from dual;
+**************************************************
+--- Extract DB links DDL
+***********************************************
+set long 9000
+begin
+    for i in ( select distinct owner,db_link from dba_db_links where owner in ( select username from dba_users where profile = 'APP_PROFILE'))
+  loop
+        dbms_output.put_line ('connect '|| i.owner || '/F00tba11#@PF_qnolpf01-db;');
+        --dbms_output.put_line (' drop database link ' || i.db_link ||';');
+        dbms_output.put_line(DBMS_METADATA.GET_DDL('DB_LINK',i.db_link,i.owner));
+        dbms_output.put_line('/');
+  end loop;
+ end;
+****
+--- Create drop Db links script.
+set long 9000
+begin
+    for i in ( select distinct owner,db_link from dba_db_links where owner in ( select username from dba_users where profile = 'APP_PROFILE'))
+  loop
+        dbms_output.put_line ('connect '|| i.owner || '/F00tba11#@PF_qnolpf01-db;');
+        dbms_output.put_line (' drop database link ' || i.db_link ||';');
+        --dbms_output.put_line(DBMS_METADATA.GET_DDL('DB_LINK',i.db_link,i.owner));
+        dbms_output.put_line('');
+  end loop;
+ end;
+-- PUBLIC db links
+begin
+    for i in ( select distinct owner,db_link from dba_db_links where owner = 'PUBLIC')
+  loop
+        dbms_output.put_line ('connect '|| 'system' || '/Am3r1can#@PF_qnolpf01-db;');
+        dbms_output.put_line (' drop database link ' || i.db_link ||';');
+        --dbms_output.put_line(DBMS_METADATA.GET_DDL('DB_LINK',i.db_link,i.owner));
+        dbms_output.put_line('');
+  end loop;
+ end;
+ 
+ begin
+    for i in ( select distinct owner,db_link from dba_db_links where owner = 'PUBLIC')
+  loop
+        dbms_output.put_line ('connect '|| 'system' || '/Am3r1can#@PF_qnolpf01-db;');
+        --dbms_output.put_line (' drop database link ' || i.db_link ||';');
+        dbms_output.put_line(DBMS_METADATA.GET_DDL('DB_LINK',i.db_link,i.owner));
+        dbms_output.put_line('/');
+  end loop;
+ end;
+****************************
+*** COMPILE Schema -- Oracle 11g Syntax:
+
+procedure compile_schema(schema varchar2,
+compile_all boolean default TRUE,
+reuse_settings boolean default FALSE);
+
+Paramemters:
+schema – The name of schema that you want to compile.
+compile_all – a boolean flag to indicate if all schema objects should be compiled even if they are INVALID
+reuse_settings – a boolean flag to indicate if the sessions settings should be reused
+
+Example: 
+
+To compile objects in SCOTT schema
+
+dbms_utility.compile_schema(‘SCOTT’);
+
+dbms_utility.compile_schema(‘SCOTT’,TRUE, TRUE);
+***********************************
+Create Index
+spool index_log.log
+ALTER SESSION ENABLE PARALLEL DDL;
+create  index CROWN.PTNT_CLNCL_AUDT_idx1 on CROWN.PTNT_CLNCL_AUDT("PTNT_CLNCL_ID","SYS_AUDT_UPDT_TS")
+tablespace CLNCL_INDX PARALLEL 16;
+alter index CROWN.PTNT_CLNCL_AUDT_idx1 NOPARALLEL;
+spool off;
+
+*********************************
+Broken jobs
+
+select JOB,BROKEN,what,LAST_DATE,LAST_SEC,NEXT_DATE,NEXT_SEC,failures
+from dba_jobs where lower(what) like '%prs_vendor_cont%' ;
+*********************************************
+***No of DB processes.***
+
+select 
+  resource_name, 
+  current_utilization, 
+  max_utilization, 
+  limit_value
+from 
+  v$resource_limit
+where 
+  resource_name in ( 'sessions', 'processes');
+
+
+select * from v$resource_limit where resource_name = 'processes';
+select 'session count from v$session', count(*) 
+from v$session
+union 
+select 'session utilization from v$resource_limit', current_utilization 
+from v$resource_limit where resource_name = 'sessions';
+***************************************************
+*** Shrink Temporary Tablespace***
+SQL> ALTER TABLESPACE temp SHRINK SPACE KEEP 40M;
+
+Tablespace altered.
+**********************************************
+** Materialized views
+SQL> select * from global_name;
+
+GLOBAL_NAME
+--------------------------------- 
+CRRPVV01
+
+SQL> select distinct(trunc(last_refresh)) from dba_mview_refresh_times;
+
+(TRUNC(LAST_REFRESH))
+---------------------
+10/3/2013
+**************************
+
+Disabling and Enabling Automatic SQL Tuning
+
+Use the DBMS_AUTO_TASK_ADMIN.DISABLE procedure to disable the Automatic SQL Tuning job. This example disables the Automatic SQL Tuning Advisor job.
+
+BEGIN
+  DBMS_AUTO_TASK_ADMIN.DISABLE(
+  client_name => 'sql tuning advisor',
+  operation => NULL,
+  window_name => NULL);
+END;
+/ 
+To re-enable the job, use the ENABLE procedure as shown:
+BEGIN
+  DBMS_AUTO_TASK_ADMIN.ENABLE(
+  client_name => 'sql tuning advisor',
+  operation => NULL,
+  window_name => NULL);
+END;
+/ 
+You can report on the status of the automatic tuning job via this query:
+SELECT client_name ,status ,consumer_group
+FROM dba_autotask_client
+ORDER BY client_name; 
+************************************************
+***************************************
+** Check Crown and REMIS properties.
+col key for a23
+col VALUE for a45
+select * from crown.crown_properties where key like '%sala%';
+***
+col key for a23
+col VALUE for a45
+select * from remisprd.sys_control where key like '%sala%';
+***************************************************************
+
+Security usefull links:-
+
+http://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2013-2566
+CVE-2014-0160
+http://www.oracle.com/technetwork/topics/security/cpuapr2014-1972952.html
+
+***************************************
+***SOFAR****
+SELECT SID, SERIAL#, CONTEXT, SOFAR, TOTALWORK,
+       ROUND(SOFAR/TOTALWORK*100,2) "%_COMPLETE"
+FROM V$SESSION_LONGOPS
+WHERE OPNAME LIKE 'RMAN%'
+  AND OPNAME  LIKE '%aggregate%'
+  AND TOTALWORK != 0
+  AND SOFAR <> TOTALWORK;
+
+SELECT l.inst_id,l.sid, l.serial#, l.sql_id, l.opname, l.username, l.target, l.sofar, l.totalwork, l.start_time,l.last_update_time,round(l.time_remaining/60,2) "REMAIN MINS", round(l.elapsed_seconds/60,2) "ELAPSED MINS", round((l.time_remaining+l.elapsed_seconds)/60,2) "TOTAL MINS", ROUND(l.SOFAR/l.TOTALWORK*100,2) "%_COMPLETE", l.message,s.sql_text 
+FROM gv$session_longops l 
+LEFT OUTER JOIN v$sql s on s.hash_value=l.sql_hash_value and s.address=l.sql_address and s.child_number=0
+WHERE l.OPNAME NOT LIKE 'RMAN%' AND l.OPNAME NOT LIKE '%aggregate%' AND l.TOTALWORK != 0 AND l.sofar<>l.totalwork AND l.time_remaining > 0;
+
+*) Verify the most recent RMAN backup is available.
+
+ set pages 50 lines 150
+ col time_taken_display for a10
+ col input_bytes_display for a10
+ col output_bytes_display for a10
+ select to_char(start_time,'DD-MON-YY HH24:MI:SS') start_time,
+        to_char(end_time,'DD-MON-YY HH24:MI:SS') end_time,
+        output_device_type,input_type,status,time_taken_display,
+        input_bytes_display,output_bytes_display
+ from V$RMAN_BACKUP_JOB_DETAILS
+ where input_type='DB FULL' and start_time > sysdate - 10
+ order by start_time desc;
+
+*************************************
+*** Find SR/CR from database*********
+*************************************
+
+select  submitter,a.ch_doc_id, status, create_date, title, impl_date,san_storage_amount,b.data
+from QUALITYNET.PCMS_CHDOC_DATA a, QUALITYNET.PCMS_CHDOC_DETAIL_DESC b
+where a.ch_doc_id = b.ch_doc_id
+and ch_doc_type in ('SR','CR') 
+--and status<>'CLOSE' 
+--and create_date> sysdate -90
+--and impl_date between (sysdate-1) and (sysdate +60) 
+and submitter = 'Ryan Henderson'
+order by create_date desc
+
+*******************************************
+*** TO_DATE Function Examples**************
+
+Examples of the to_date function might include:
+
+SELECT * FROM LB_USER.DATABASECHANGELOG
+WHERE "DATEEXECUTED" >= TO_DATE('2016-07-01', 'yyyy-mm-dd');
+
+
+to_date('10-12-06','MM-DD-YY')
+
+to_date('jan 2007','MON YYYY')
+
+to_date('2007/05/31','YYYY/MM/DD')
+
+to_date('12-31-2007 12:15','MM-DD-YYYY HH:MI')
+
+to_date('2006,091,00:00:00' , 'YYYY,DDD,HH24:MI:SS')
+
+to_date('15-may-2006 06:00:01','dd-mon-yyyy hh24:mi:ss')
+
+to_date('022002','mmyyyy')
+
+to_date('12319999','MMDDYYYY')
+
+to_date(substr( collection_started,1,12),'DD-MON-YY HH24')
+
+to_date('2004/10/14 21', 'yyyy/mm/dd hh24')
+
+TO_DATE(First_Load_Time, 'yyyy-mm-dd/hh24:mi:ss'))*24*60)
+TO_DATE(substr(LAST_LOAD_TIME,1,10), 'yyyy-mm-dd')= TO_DATE('2014-07-07', 'yyyy-mm-dd')
+
+
+Update CROWN_ETL.etl_batch_status
+  Set batch_stus_start_ts = to_date('5/28/2014  00:00:00' ,'mm/dd/yyyy hh24:mi:ss')
+Where batch_stus_cd = 'LC';
+
+and TRUNC(RC.RPT_NEXT_GENERATION_DATE) >= TRUNC(SYSDATE);
+and to_char(rc.rpt_next_generation_date,'MM/DD/YYYY') = '07/27/2014'
+
+
+**********************************************************
+*** Minus:-
+
+select user_name from ssamra_dba.CROWN_USERS
+minus
+select user_name from crown.crown_users
+******************************
+*** RMAN:-
+run{
+allocate channel ch1 device type disk format ='/tmp/';
+restore archivelog from sequence 49135 until  sequence 49140;
+release channel ch1;
+}
+**Find RMAN backup tapes required to restore the database on a particular date.
+spool log to 'june_08.log'
+Run
+{
+set until time "to_date('08-06-2015:05:00:00','DD-MM-YYYY:HH24:MI:SS')";
+Allocate channel  ch1 type sbt;
+Restore database preview;
+}
+spool off;
+grep "Handle"  june_08.log
+
+***********************************
+*** Monitor RMAN job progress:-
+
+SELECT SID, SERIAL#, CONTEXT, SOFAR, TOTALWORK,
+       ROUND(SOFAR/TOTALWORK*100,2) "%_COMPLETE"
+FROM V$SESSION_LONGOPS
+WHERE OPNAME LIKE 'RMAN%'
+  AND OPNAME NOT LIKE '%aggregate%'
+  AND TOTALWORK != 0
+  AND SOFAR <> TOTALWORK;
+
+*** Verify the most recent RMAN backup is available.
+
+ set pages 50 lines 150
+ col time_taken_display for a10
+ col input_bytes_display for a10
+ col output_bytes_display for a10
+ select to_char(start_time,'DD-MON-YY HH24:MI:SS') start_time,
+        to_char(end_time,'DD-MON-YY HH24:MI:SS') end_time,
+        output_device_type,input_type,status,time_taken_display,
+        input_bytes_display,output_bytes_display
+ from V$RMAN_BACKUP_JOB_DETAILS
+ where input_type='DB FULL' and start_time > sysdate - 10
+ order by start_time desc;
+
+***********************************************************************
+** execute the following sqls on rmctpr03 database to check the completeion of backup***
+select lower(db_name),end_time from rman.rc_rman_backup_job_details t1
+where end_time =
+(select max(t2.end_time) from rman.rc_rman_backup_job_details t2
+where input_type = 'ARCHIVELOG' and STATUS = 'COMPLETED'
+and t1.DB_NAME = t2.DB_NAME)
+order by t1.END_TIME desc;
+
+select lower(db_name),end_time,STATUS from rman.rc_rman_backup_job_details t1
+where end_time =
+(select max(t2.end_time) from rman.rc_rman_backup_job_details t2
+where input_type like  '%FULL%' --and STATUS = 'COMPLETED'
+and t1.DB_NAME = t2.DB_NAME)
+order by t1.END_TIME desc;
+
+Execute the following on GRCTPR02 databae to refresh the apex page.
+begin
+  -- Call the procedure
+  monitor_dba.refresh_database_details;
+end;
+****************************************
+*** Date of database Backup ***********
+select SESSION_KEY, INPUT_TYPE, STATUS,
+ to_char(START_TIME,'mm/dd/yy hh24:mi') start_time,
+to_char(END_TIME,'mm/dd/yy hh24:mi') end_time,
+elapsed_seconds/3600 hrs
+from V$RMAN_BACKUP_JOB_DETAILS
+-- where END_TIME>SYSDATE-32
+where STATUS='COMPLETED'
+order by session_key;  
+
+***************************************
+**** Check interconnect interface connectivity** Fernando ******
+Please check the interconnects.
+
+oracle@tsdbld02a {} ~
+$ ping tsdbld01a-priv
+ping: sendto Network is unreachable
+
+oracle@tsdbld02a {} ~
+$ ping tsdbld02a-priv
+tsdbld02a-priv is alive
+
+oracle@tsdbld02a {} ~
+$ ping tsdbld02b-priv
+ping: sendto Network is unreachable
+
+oracle@tsdbld02a {} ~
+
+*************************************************
+*** OEM Agent:-
+
+Secure Agent:-
+
+1. <AGENT_HOME>/BIN> emctl stop agent
+2. <AGENT_HOME>/BIN> emctl secure agent
+3. <AGENT_HOME>/BIN> emctl start agent
+4. <AGENT_HOME>/BIN> emctl upload - Upload should work fine
+
+Clear agent:-
+emctl clearstate agent
+emctl reload agent
+emctl upload agent 
+emctl status agent
+*********************************************
+* Snapshot ****
+select to_char(s.startup_time,'dd Mon "at" HH24:mi:ss')  instart_fmt
+     , di.instance_name                                  inst_name
+     , di.db_name                                        db_name
+     , s.snap_id                                         snap_id
+     , to_char(s.end_interval_time,'dd Mon YYYY HH24:mi') snapdat
+     , s.snap_level                                      lvl
+  from dba_hist_snapshot s
+     , dba_hist_database_instance di order by snap_id desc
+*************************************************
+Bobpeterson:-
+No but don't need it if you use this trick:
+
+grant alter database link to HOPQDRP;
+
+grant create database link to HOPQDRP;
+
+ALTER USER HOPQDRP GRANT CONNECT THROUGH bpeterso_dba;
+
+CONNECT bpeterso_dba[HOPQDRP]/xxxxxxxxxxxxxxxx@sdolts021
+
+select * from global_name@HADWTS03@HAJI;
+
+drop database link HADWTS03@HAJI; 
+
+create database link HADWTS03@HAJI
+connect to HAJI identified by "xxxxxxxxxxxxxxxx"
+using 'HADWTS03-db';
+
+show user
+
+SQL> CONNECT bpeterso_dba/xxxxxxxxxxxxxxxx@sdolts021
+ 
+ALTER USER HOPQDRP REVOKE CONNECT THROUGH bpeterso_dba;
+***********************************
+*** John Warren:-
+SYS@sdoltr01> show parameter process
+processes                            integer     1000
+SYS@sdoltr01>  select resource_name, current_utilization, max_utilization, limit_value 
+    from v$resource_limit 
+    where resource_name in ('sessions', 'processes');  2    3  
+RESOURCE_NAME                  CURRENT_UTILIZATION MAX_UTILIZATION LIMIT_VALU
+------------------------------ ------------------- --------------- ----------
+processes                                      978            1000       1000
+sessions                                       989            1016       1536
+This is set to 1600 in production. Changing this would require a database bounce… 
+SYS@sdolpr011> show parameter process  
+processes                            integer     1600
+*********************************************************
+Tomide:- ASM spfile
+**When Spfile is in use, follow these steps
+RAC	
+alter system set memory_max_target=<new value> scope=spfile  sid=’*’;
+alter system set memory_target=<new value> scope=spfile sid=’*’;
+alter system set diagnostic_dest= ‘/app/u01/oracle’ scope=spfile  sid=’*’;
+NON-RAC	
+alter system set memory_max_target=<new value> scope=spfile;
+alter system set memory_target=<new value> scope=spfile;
+alter system set diagnostic_dest= ‘/app/u01/oracle’ scope=spfile;
+
+**When Spfile is NOT in use, follow these steps
+RAC	
+create spfile=’+FRADG’ from pfile=’/app/u01/oracle/product/11.2.0.3/dbs/initasm.ora.bac1118’;
+Bounce ASM instance to use newly created spfile.
+alter system set memory_max_target=<new value> scope=spfile  sid=’*’;
+alter system set memory_target=<new value> scope=spfile sid=’*’;
+alter system set diagnostic_dest= ‘/app/u01/oracle’ scope=spfile  sid=’*’;
+Bounce ASM instance to have the new changes take effect.
+NON-RAC	
+create spfile=’+FRADG’ from pfile=’/app/u01/oracle/product/11.2.0.3/dbs/initasm.ora.bac1118’;
+Bounce ASM instance to use newly created spfile.
+alter system set memory_max_target=<new value> scope=spfile;
+alter system set memory_target=<new value> scope=spfile;
+alter system set diagnostic_dest= ‘/app/u01/oracle’ scope=spfile;
+*******************************************
+Alpoor:-
+** Find segments in a datafile
+SELECT DISTINCT OWNER, SEGMENT_NAME ,d2.FILE_NAME,d2.FILE_ID
+FROM DBA_EXTENTS d,dba_data_files d2 where d.file_id=20 and d.FILE_ID = d2.FILE_ID
+
+
+*****************************************
+Fernando:- 
+Save and restore crontab
+One way to do it:
+
+$ crontab –l > crontab.bak # save crontab 
+$ crontab –r               # remove crontab
+$ crontab < crontab.bak    # restore crontab
+
+Check devices associated to diskgroups:-
+$ kfod status=TRUE asm_diskstring='/dev/rdsk/emcpower*a' disk=all dscvgroup=TRUE
+*** Flashback Turn ON***
+sys@ALOLIF02> show parameter recovery
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+db_recovery_file_dest                string
+db_recovery_file_dest_size           big integer 0
+recovery_parallelism                 integer     0
+
+sys@ALOLIF02> alter system set db_recovery_file_dest_size = 50g ;
+System altered.
+
+sys@ALOLIF02> alter system set  db_recovery_file_dest = '+FLASH_DG' ;
+System altered.
+
+sys@ALOLIF02> alter database flashback on ;
+Database altered.
+
+sys@ALOLIF02> create restore point before_update_scripts ;
+Restore point created.
+  ** user password **
+select name,password_date " Password Changed date" from sys.user$ A ,sys.user_history$ B where A.user# = B.user# 
+and A.name= upper('ICPROJECTS') order by password_date;
+
+select username, timestamp, returncode, userhost, os_username, os_process
+from dba_audit_session
+where username like upper('ICPROJECTS') and timestamp > sysdate - 10
+order by timestamp;
+
+col username for a35
+set line 200
+select user_id,username,created from dba_users where username ='SSAMRA_DBA';
+select user#,name,password,ptime,ctime,exptime from sys.user$ where name='SSAMRA_DBA';
+select * from sys.user_history$ where user#=129;
+select name,A.password,password_date " Password Changed date", A.ptime from sys.user$ A ,sys.user_history$ B where A.user# = B.user# 
+and A.name= upper('SSAMRA_DBA') order by password_date desc;
+
+If you have PASSWORD_REUSE_TIME and/or PASSWORD_REUSE_MAX set in a profile assigned to a user account 
+then you can reference dictionary table USER_HISTORY$ for when the password was changed for this account. 
+This will maintain any password which still falls with in the PASSWORD_REUSE_TIME and PASSWORD_REUSE_MAX limits.
+
+*** SQL Developer Oracle Client/Thin client ****
+
+Oracle SQL Developer does not use the Oracle Client and that should not be an issue. 
+It uses a jdbc thin client that comes with SQL Developer itself.
+**************************************************
+*** DBA_AUDIT_TRAIL ***
+set lines 9999
+COLUMN username           FORMAT A10
+COLUMN owner              FORMAT A10
+COLUMN obj_name           FORMAT A10
+COLUMN extended_timestamp FORMAT A35
+
+SELECT
+   username,
+   extended_timestamp,
+   owner,
+   obj_name,
+   action_name
+FROM
+   dba_audit_trail
+WHERE
+   owner = 'CROWN' and obj_name='ZIP_CODES'
+ORDER BY
+   timestamp desc;
+
+***********************************************
+*** Ryan Henderson *****
+Pretty good asmcmd command to check for unshared disks on RAC.  The –M flag displays the disks that are visible to some but not all active instances. These are disks that, if included in a disk group, will cause the mount of that disk group to fail on the instances where the disks are not visible.
+
+{+ASM1}oracle@pdqndb09:/export/home/oracle > asmcmd lsdsk -M
+Inst_ID  Path
+      2  /dev/rdsk/emcpower2005a
+      2  /dev/rdsk/emcpower2006a
+{+ASM1}oracle@pdqndb09:/export/home/oracle > asmcmd lsdsk --candidate -k
+Total_MB  Free_MB  OS_MB  Name                  Failgroup             Failgroup_Type  Library  Label  UDID  Product  Redund   Path
+       0        0  34871                                              REGULAR         System                         UNKNOWN  /dev/rdsk/emcpower2005a
+       0        0  34871                                              REGULAR         System                         UNKNOWN  /dev/rdsk/emcpower2006a
+       0        0  34871                                              REGULAR         System                         UNKNOWN  /dev/rdsk/emcpower41g
+       0        0  34871                                              REGULAR         System                         UNKNOWN  /dev/rdsk/emcpower46g
+       0        0  34871                                              REGULAR         System                         UNKNOWN  /dev/rdsk/emcpower47g
+       0        0  34871                                              REGULAR         System                         UNKNOWN  /dev/rdsk/emcpower48g
+       0        0  34871                                              REGULAR         System                         UNKNOWN  /dev/rdsk/emcpower66a
+       0        0  34871                                              REGULAR         System                         UNKNOWN  /dev/rdsk/emcpower68a
+
+Then after they were shared:
+
+{+ASM1}oracle@pdqndb09:/export/home/oracle > asmcmd lsdsk -M
+Inst_ID  Path
+{+ASM1}oracle@pdqndb09:/export/home/oracle >
+
+Also, a good article on mounting diskgroups and dropping disks forcibly: http://asmsupportguy.blogspot.com/2011/12/forcing-issue.html
+
+Thanks,
+Ryan
+*******************************************************
+*** Find Hidden parameters in a database***
+select 
+   ksppinm, 
+   ksppdesc 
+from 
+   x$ksppi 
+where
+   substr(ksppinm,1,1) = '_'
+order by 
+   1,2;
+**********************************
+*** Fimd database growth mothly
+-- http://dbaforums.org/oracle/index.php?showtopic=24001
+set pagesize 50000
+tti "Database growth per month for last year"
+
+select to_char(creation_time, 'RRRR Month') "Month",
+       sum(bytes)/1024/1024/1024 "Growth in GB"
+  from sys.v_$datafile
+where creation_time > SYSDATE-365
+group by to_char(creation_time, 'RRRR Month')
+/
+
+tti off
+******************************
+*** find connected drives**********
+C:\Users\cc5718>net use
+New connections will be remembered.
+
+
+Status       Local     Remote                    Network
+
+-------------------------------------------------------------------------------
+OK           G:        \\vntiaqnfp01\sas2_bcia\qiosupport
+                                                Microsoft Windows Network
+OK           H:        \\bcvaqnfp01\users$\cc5718
+                                                Microsoft Windows Network
+OK           O:        \\vntiaqnfp01\sas2_gdia2\qiosupport
+                                                Microsoft Windows Network
+OK           R:        \\bcvaqnfp01\data         Microsoft Windows Network
+OK           S:        \\bcvaqnfp01\sas2         Microsoft Windows Network
+OK           T:        \\bcvaqnfp01\data\deptdata
+                                                Microsoft Windows Network
+OK           U:        \\vntiaqnfp01\sas2_bcia   Microsoft Windows Network
+OK           V:        \\vntiaqnfp01\data\deptdata_bcia
+                                                Microsoft Windows Network
+The command completed successfully.
+
+
+******************************
+*** John Heller DBA **********
+I used this query on GRCTPR02 to quickly view all statements running on a host:
+
+--Monitor multiple databases at once.
+select * from (select 'dlolts30' database_name, elapsed_time/1000000 seconds, users_executing, executions,substr(sql_text, 1, 30) sql_text, sql_id, inst_id, parsing_schema_name from gv$sql@m5_dlolts30 where users_executing > 0 order by seconds desc) where rownum <= 10 union all
+select * from (select 'hadwts03' database_name, elapsed_time/1000000 seconds, users_executing, executions,substr(sql_text, 1, 30) sql_text, sql_id, inst_id, parsing_schema_name from gv$sql@m5_hadwts03 where users_executing > 0 order by seconds desc) where rownum <= 10 union all
+select * from (select 'qpolts01' database_name, elapsed_time/1000000 seconds, users_executing, executions,substr(sql_text, 1, 30) sql_text, sql_id, inst_id, parsing_schema_name from gv$sql@m5_qpolts01 where users_executing > 0 order by seconds desc) where rownum <= 10 union all
+select * from (select 'qpolts03' database_name, elapsed_time/1000000 seconds, users_executing, executions,substr(sql_text, 1, 30) sql_text, sql_id, inst_id, parsing_schema_name from gv$sql@m5_qpolts03 where users_executing > 0 order by seconds desc) where rownum <= 10 union all
+select * from (select 'sddwts03' database_name, elapsed_time/1000000 seconds, users_executing, executions,substr(sql_text, 1, 30) sql_text, sql_id, inst_id, parsing_schema_name from gv$sql@m5_sddwts03 where users_executing > 0 order by seconds desc) where rownum <= 10 union all
+select * from (select 'sddwts30' database_name, elapsed_time/1000000 seconds, users_executing, executions,substr(sql_text, 1, 30) sql_text, sql_id, inst_id, parsing_schema_name from gv$sql@m5_sddwts30 where users_executing > 0 order by seconds desc) where rownum <= 10
+order by 1, 2 desc;
+***
+It would probably be a good idea to add a step like this at the end of the ETL process:
+begin
+      dbms_stats.gather_schema_stats(ownname => 'ESRD_QIP', degree => 8);
+end;
+/
+***
+I found the rows with this query:
+
+select USERHOST, RETURNCODE, nTIMESTAMP#, rowid
+from SYS.aud$
+where userid='DBSNMP' and returncode in (1027,28000)
+and ntimestamp#>sysdate-1/48
+order by nTIMESTAMP#;
+
+And deleted them with these statements:
+
+delete from sys.aud$ where rowid='AAARK+AAFAAAACsAAJ';
+delete from sys.aud$ where rowid='AAARK+AAFAAAACsAAK';
+
+
+I thought we agreed not to do this anymore?!  Setting dates in the future always causes weird problems.
+
+Thanks,
+Jon
+
+-----Original Message-----
+From: Oracle Role [mailto:oracle@vvendb04-mgt.sdps.org] 
+Sent: Wednesday, June 01, 2016 9:05 AM
+To: QNET-Prod-DBAs; QNET-Prod-Middleware-Admins
+Subject: The following schemas are locked or on the verge of locking on vvendb04 at June,01-10:05:02 
+
+Checking Instance - rcrpim22
+
+USERHOST               USERNAME           PROFILE                 STATUS   RETURNCODE LOCK_DATE      TIMESTAMP
+------------------------- -------------------- -------------------- -------- ---------- -------------------- --------------------
+vqnpmt13.sdps.org      DBSNMP             APP_PROFILE       OPEN        28000                   03-JUN-2016 11:21:58
+vqnpmt13.sdps.org      DBSNMP             APP_PROFILE       OPEN        28000                   03-JUN-2016 11:21:58
+***compile****
+https://oracle-base.com/articles/misc/recompiling-invalid-schema-objects
+
+SYS@rcrppr011> exec sys.utl_recomp.recomp_serial('SYS');
+
+PL/SQL procedure successfully completed.
+
+SYS@rcrppr011> select owner,object_name,object_type,status from dba_invalid_objects where owner='SYS'
+  2  /
+
+no rows selected
+
+NOT Worked the following :- 
+SYS@rcrppr011> @?/rdbms/admin/utlrp.sql 1
+
+*** Auding**
+audit CREATE SESSION BY ACCESS WHENEVER NOT SUCCESSFUL;
+audit CREATE SESSION BY ACCESS WHENEVER SUCCESSFUL; 
+
+*****************************************
+***Olga Poznyakova DBA in Edaptive ****
+** Steps to Change Crown App User **
+
+select * from CROWN.CROWN_USERS where user_name ='qn7149'
+
+SYS@crolpr02> update crown.crown_users u set u.inactive_date = NULL    where  user_name = 'qn7149';
+
+1 row updated.
+
+SYS@crolpr02> commit;
+
+Commit complete.
+
+update crown.crown_users u
+set u.inactive_date = NULL,
+   u.active = 1,
+   -- u.last_login = SYSDATE
+where  user_name = 'qn7149';
+
+****Edaptive DBA groups**
+[?12/?13/?2016 9:15 AM] Poznyakova, Olga: 
+sure. give me a sec
+[?12/?13/?2016 9:16 AM] Poznyakova, Olga: 
+We have two groups - one is for tech DBAs and another is for deployment DBAs.
+I will send both:
+
+EQRSTech-Infra-DevOps-Db <EQRSTech-Infra-DevOps-Db@nwed.esrd.net> 
+EQRSTech-Infra-Bld-Deploy <EQRSTech-Infra-Bld-Deploy@nwed.esrd.net> 
+************************************************
+******* Find all DDL Locks in database.****
+
+select * from dba_ddl_locks l,v$access a
+where l.session_id = a.sid
+  and a.owner = 'PART_A'
+order by a.owner;
+
+
+*********************************************
+** Monitoring scripts**
+
+I added the file /app/u01/oracle/scripts/chk_db_lsnr_status.pqdwts03.conf with the contents "check_sid=FALSE".  Hopefully that will stop these emails.
+
+**********AWR***
+select * from table(m5('alter system set AWR_SNAPSHOT_TIME_OFFSET=1000000', 'tssddb02'));
+
+*********************************
+**** Method 5 From John Heller*****
+*********************************
+
+If you use Method5 your M5_ database links may have disappeared.  They were dropped as part of resetting the password hash.
+
+To re-create them, run something like this on GRCTPR02 (you can ignore the results):
+begin
+      method5_app.method5.run(
+            p_table_name => 'v_test',
+            p_code => 'select * from global_name',
+            p_drop_table_if_exists => true
+      );
+end;
+/
+
+I plan to automate this in a future version.
+***********************
+--Redo generated per second for each database on a host.
+begin
+      method5_app.method5.run(
+            p_table_name => 'redo_generated_per_host',
+            p_table_exists_action => 'drop',
+            --p_asynchronous => false,
+            p_targets => 'pdendb24',
+            p_code => q'<
+                  select snap_id, begin_time, end_time, round(value/1024/1024, 1) mb
+                  from dba_hist_sysmetric_history
+                  where metric_name = 'Redo Generated Per Sec'
+                  order by begin_time desc
+            >'
+      );
+end;
+/ 
+****
+The scripts are OK.  After an upgrade these invalid password hashes will break any type of "alter user" command on those schemas.  But that's the only thing that error does - it's not crashing the database or breaking anything else as far as I know.
+
+Here's how I removed the old password hashes:
+begin
+      m5_proc(
+            p_code                => q'[delete from sys.user_history$ where user# in (select user_id from dba_users where username in ('KMARTIN05'))]',
+            p_targets             => 'cldwpr01,f8oltr01,gpolpr01,gpolpr09,pqdwpr01,pqolpr01,pqqipr01,pqrppr01,qnolts33,qnrppr01,sddwpr01,sddwtr01,sdolpr01,sdoltr01,wcfnpr01',
+            p_run_as_sys          => true,
+            p_table_name          => 'remove_pw_history',
+            p_table_exists_action => 'drop'
+      );
+end;
+/
+
+************************************************
+Heller:-I ran these commands to harmonize the parameters across AXOL% databases.  But the values won't take effect until after a restart.
+select * from table(m5('alter system set processes = 2000 scope=spfile', 'axoltr01,axolim22,axolts33,axolts01,axoldv01,axolim33,axolts11,axolif11,axolts22,axolim11'));
+select * from table(m5('alter system set sessions = 3024 scope=spfile', 'axoltr01,axolim22,axolts33,axolts01,axoldv01,axolim33,axolts11,axolif11,axolts22,axolim11'));
+
+**************************************************
+
+FIX OF ISSUE
+                alter user btedder quota unlimited on users;
+ACTIONS NEEDED TO AVOID ISSUE
+                I ran the command on all databases just in case it happened somewhere else.
+
+                begin
+                                m5_proc('alter user btedder quota unlimited on users');
+                end;
+                /
+
+***************************************************
+You can fix the ORA-600 error with a statement like this:  delete from sys.user_history$ where user# in (select user_id from dba_users where username in ('ENTER_USERNAME_HERE'));
+
+*********************************************************************************************************
+**** Seesion activity on Database in minutes ****
+select username, round(count(*)/60) activity_minutes
+from gv$active_session_history
+join dba_users on gv$active_session_history.user_id = dba_users.user_id
+where sample_time >= trunc(systimestamp)
+	and profile in ('APP_PROFILE', 'BATCH_PROCESS_PROFILE', 'LOCKED_APP_PROFILE', 'PROD_DT_MGT_PROFILE', 'USER_PROFILE')
+	and username not in ('DBSNMP', 'METHOD5')
+group by username
+having round(count(*)/60) > 0
+order by username;
+
+*****************************************************
+*** Rhonda 
+I was having the issue with my own account getting locked....using METHOD5, I executed this:  delete from user_history$ where user# in (select user# from user$ where name='RCLEMENT_DBA');
+Then, I changed my password.
+
+
+
+***************************************************
+srvctl:- http://docs.oracle.com/cd/E24693_01/server.11203/e17120/restart005.htm#autoId7
+
+
+
+**********************************************************************************
+*** Al Munsey **
+ Windows Doc location:- 
+   O:\JMitchell_grp\BCSSI DBA Group\Oracle_software\windows\12.1.0.2
+   O:\JMitchell_grp\BCSSI DBA Group\Documentation\QIN Databases
+**********************************************************************************
+*******Elvis********************
+{sdolpr011}oracle@pdendb20:/export/home/oracle > srvctl status instance -d sdolpr01 -i sdolpr011
+Instance sdolpr011 is running on node pdendb20
+{sdolpr011}oracle@pdendb20:/export/home/oracle > srvctl stop instance -d sdolpr01 -i sdolpr011
+{sdolpr011}oracle@pdendb20:/export/home/oracle > srvctl start instance -d sdolpr01 -i sdolpr011
+{sdolpr011}oracle@pdendb20:/export/home/oracle > srvctl status instance -d sdolpr01 -i sdolpr011
+Instance sdolpr011 is running on node pdendb20
+{sdolpr011}oracle@pdendb20:/export/home/oracle > srvctl status service -d sdolpr01
+Service sdol_cognos_rpt_srvc is running on instance(s) sdolpr012
+Service sdol_datapull_srvc is running on instance(s) sdolpr012
+Service sdol_online_srvc is running on instance(s) sdolpr012
+Service sdol_prs_srvc is running on instance(s) sdolpr012
+Service sdol_report_srvc is running on instance(s) sdolpr012
+{sdolpr011}oracle@pdendb20:/export/home/oracle > srvctl stop service -d sdolpr01
+{sdolpr011}oracle@pdendb20:/export/home/oracle > srvctl status service -d sdolpr01
+Service sdol_cognos_rpt_srvc is not running.
+Service sdol_datapull_srvc is not running.
+Service sdol_online_srvc is not running.
+Service sdol_prs_srvc is not running.
+Service sdol_report_srvc is not running.
+{sdolpr011}oracle@pdendb20:/export/home/oracle > srvctl start service -d sdolpr01
+{sdolpr011}oracle@pdendb20:/export/home/oracle > srvctl status service -d sdolpr01
+Service sdol_cognos_rpt_srvc is running on instance(s) sdolpr012
+Service sdol_datapull_srvc is running on instance(s) sdolpr011
+Service sdol_online_srvc is running on instance(s) sdolpr011
+Service sdol_prs_srvc is running on instance(s) sdolpr012
+Service sdol_report_srvc is running on instance(s) sdolpr011
+***********************************************************
+*** Olga DBA ****
+
+[?9/?15/?2017 8:48 AM] Poznyakova, Olga: 
+Edaptive is gone - it was sold to ManTech
+[?9/?15/?2017 8:48 AM] Samra, Surinderbir: 
+Then which dba team handles their databases?
+[?9/?15/?2017 8:48 AM] Poznyakova, Olga: 
+EQRS DevOpsGroup <EQRSDevOpsGroup@nwed.esrd.net> 
+If you need to get in touch with former Edaptive DBA group, see email above
+[?9/?15/?2017 8:52 AM] Samra, Surinderbir: 
+We used work with Mark Tarchalski's team . Is this (EQRSDevOpsGroup@nwed.esrd.net ) group belongs to former Edaptive DBA group ?
+[?9/?15/?2017 8:52 AM] Poznyakova, Olga: 
+Mark left 1.5 years ago. 
+Now we have Val Schneider 
+and couple more people. 
+[?9/?15/?2017 8:53 AM] Samra, Surinderbir: 
+Thanks
+[?9/?15/?2017 8:54 AM] Poznyakova, Olga: 
+EQRS DevOps = DBAs for CW/REMIS/QIP (now we are called EQRS project).
+
+
+************Emails********************
+** ON-Call Week
+I am DBA on call this week and will not be working from 9:00AM - 5:00PM.
+I am DBA on call this week and might not be available from 9:00AM - 6:00PM (EST).
+
+I am working on call this week and will only be available after hours.  For urgent requests, please email the hcqis-ops-dba team.  Thank you.
+
+************************************************************************
+**** HADJI sqls ****
+
+Please send me output from :
+
+SELECT STATE,OWNER,JOB_name,job_creator,start_date,run_count,failure_count,
+       last_start_date,last_run_duration,comments 
+FROM sys.dba_scheduler_jobs j 
+WHERE regexp_like(j.job_action,'SCHEDULE_ANALYZE_PROCESSING')
+ORDER  BY job_name;
+
+select * from ifmc_common.program_audit_log
+where pgm_strt_time > sysdate -30
+  and SCHEMA_NAME = 'PART_B'
+order by pgm_strt_time;
+
+select * from ifmc_common.sdps_error_log
+where TIME_STAMP > sysdate - 30
+order by time_stamp;
+
+select * from PART_B.PARTB_MONTHLY_LOAD_CTRL t order by 1;
+
+working on what to run for stats…
+Thank you
+********************************************************************
+**** Manish Hood ***
+The dictionary stats is gathered (it took @ 2 hours). Now running fixed objects stats..
+
+13:42:11 SYS@hadwpr01> EXEC DBMS_STATS.GATHER_DICTIONARY_STATS;
+
+PL/SQL procedure successfully completed.
+
+Elapsed: 01:57:20.55
+15:39:34 SYS@hadwpr01>
+15:40:10 SYS@hadwpr01> EXEC DBMS_STATS.GATHER_FIXED_OBJECTS_STATS;
+
+
+Regards,
+Manish Hood
+
+*************************************************************
+begin EXECUTE IMMEDIATE 'GRANT DV_MONITOR TO "'|| 'system'||'"'; end;
+

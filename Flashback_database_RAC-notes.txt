@@ -1,0 +1,30 @@
+set line 200
+col HOST_NAME for a65
+select instance_name,host_name, status from gv$instance;
+
+INSTANCE_NAME    HOST_NAME                                                         STATUS
+---------------- ----------------------------------------------------------------- ------------
+TST41            hrewoel02.hr.state.sbu                                            OPEN
+TST42            hrewoel03.hr.state.sbu                                            OPEN
+
+SQL> select log_mode,flashback_on from v$database;
+
+LOG_MODE     FLASHBACK_ON
+------------ ------------------
+ARCHIVELOG   YES
+
+
+col name for a35
+col TIME for a55
+SQL> select name,time from v$restore_point;
+
+NAME                                TIME
+----------------------------------- -------------------------------------------------------
+CLEAN_DB                            15-MAR-19 03.27.08.000000000 PM
+
+******************************
+
+
+begin
+/* GFMS Extract*/ PCSTRAVEL.p_run_gfms_interface;
+end; 

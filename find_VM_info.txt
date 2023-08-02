@@ -1,0 +1,257 @@
+
+[oracle@hrewlinfoms01 etc]$ cat /etc/os-release
+NAME="Oracle Linux Server"
+VERSION="6.10"
+ID="ol"
+VERSION_ID="6.10"
+PRETTY_NAME="Oracle Linux Server 6.10"
+ANSI_COLOR="0;31"
+CPE_NAME="cpe:/o:oracle:linux:6:10:server"
+HOME_URL="https://linux.oracle.com/"
+BUG_REPORT_URL="https://bugzilla.oracle.com/"
+
+ORACLE_BUGZILLA_PRODUCT="Oracle Linux 6"
+ORACLE_BUGZILLA_PRODUCT_VERSION=6.10
+ORACLE_SUPPORT_PRODUCT="Oracle Linux"
+ORACLE_SUPPORT_PRODUCT_VERSION=6.10
+[oracle@hrewlinfoms01 etc]$ cat /etc/oracle-release
+Oracle Linux Server release 6.10
+[oracle@hrewlinfoms01 etc]$
+
+**************************************************
+Memory:-
+[oracle@hrewlinfoms01 ~]$ free -m
+             total       used       free     shared    buffers     cached
+Mem:         16045      15721        324          0        510       9190
+-/+ buffers/cache:       6020      10025
+Swap:         7999        185       7814
+
+********************************************
+[oracle@hrewlinfoms01 etc]$ dmidecode -t processor
+# dmidecode 2.12
+/dev/mem: Permission denied
+
+*************************************************
+**
+[oracle@hrewlinfoms01 etc]$ cat /etc/oracle-release
+Oracle Linux Server release 6.10
+***************************************
+** CPU info **
+[oracle@hrewlinfoms01 etc]$ cat /proc/cpuinfo
+processor       : 0
+vendor_id       : GenuineIntel
+cpu family      : 6
+model           : 62
+model name      : Intel(R) Xeon(R) CPU E5-2680 v2 @ 2.80GHz
+stepping        : 4
+microcode       : 0x42d
+cpu MHz         : 2799.565
+cache size      : 25600 KB
+physical id     : 0
+siblings        : 4
+core id         : 0
+cpu cores       : 4
+apicid          : 0
+initial apicid  : 0
+fpu             : yes
+fpu_exception   : yes
+cpuid level     : 13
+wp              : yes
+flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx rdtscp lm flush_l1d constant_tsc arch_perfmon nopl xtopology tsc_reliable nonstop_tsc eagerfpu pni pclmulqdq ssse3 cx16 pcid sse4_1 sse4_2 x2apic popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm arat ibrs stibp ia32_arch_caps ibpb ssbd pti fsgsbase tsc_adjust smep
+bugs            : cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf mds
+bogomips        : 5600.00
+clflush size    : 64
+cache_alignment : 64
+address sizes   : 43 bits physical, 48 bits virtual
+power management:
+
+processor       : 1
+vendor_id       : GenuineIntel
+cpu family      : 6
+model           : 62
+model name      : Intel(R) Xeon(R) CPU E5-2680 v2 @ 2.80GHz
+stepping        : 4
+microcode       : 0x42d
+cpu MHz         : 2799.565
+cache size      : 25600 KB
+physical id     : 0
+siblings        : 4
+core id         : 1
+cpu cores       : 4
+apicid          : 1
+initial apicid  : 1
+fpu             : yes
+fpu_exception   : yes
+cpuid level     : 13
+wp              : yes
+flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx rdtscp lm flush_l1d constant_tsc arch_perfmon nopl xtopology tsc_reliable nonstop_tsc eagerfpu pni pclmulqdq ssse3 cx16 pcid sse4_1 sse4_2 x2apic popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm arat ibrs stibp ia32_arch_caps ibpb ssbd pti fsgsbase tsc_adjust smep
+bugs            : cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf mds
+bogomips        : 5600.00
+clflush size    : 64
+cache_alignment : 64
+address sizes   : 43 bits physical, 48 bits virtual
+power management:
+
+processor       : 2
+vendor_id       : GenuineIntel
+cpu family      : 6
+model           : 62
+model name      : Intel(R) Xeon(R) CPU E5-2680 v2 @ 2.80GHz
+stepping        : 4
+microcode       : 0x42d
+cpu MHz         : 2799.565
+cache size      : 25600 KB
+physical id     : 0
+siblings        : 4
+core id         : 2
+cpu cores       : 4
+apicid          : 2
+initial apicid  : 2
+fpu             : yes
+fpu_exception   : yes
+cpuid level     : 13
+wp              : yes
+flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx rdtscp lm flush_l1d constant_tsc arch_perfmon nopl xtopology tsc_reliable nonstop_tsc eagerfpu pni pclmulqdq ssse3 cx16 pcid sse4_1 sse4_2 x2apic popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm arat ibrs stibp ia32_arch_caps ibpb ssbd pti fsgsbase tsc_adjust smep
+bugs            : cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf mds
+bogomips        : 5600.00
+clflush size    : 64
+cache_alignment : 64
+address sizes   : 43 bits physical, 48 bits virtual
+power management:
+
+processor       : 3
+vendor_id       : GenuineIntel
+cpu family      : 6
+model           : 62
+model name      : Intel(R) Xeon(R) CPU E5-2680 v2 @ 2.80GHz
+stepping        : 4
+microcode       : 0x42d
+cpu MHz         : 2799.565
+cache size      : 25600 KB
+physical id     : 0
+siblings        : 4
+core id         : 3
+cpu cores       : 4
+apicid          : 3
+initial apicid  : 3
+fpu             : yes
+fpu_exception   : yes
+cpuid level     : 13
+wp              : yes
+flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx rdtscp lm flush_l1d constant_tsc arch_perfmon nopl xtopology tsc_reliable nonstop_tsc eagerfpu pni pclmulqdq ssse3 cx16 pcid sse4_1 sse4_2 x2apic popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm arat ibrs stibp ia32_arch_caps ibpb ssbd pti fsgsbase tsc_adjust smep
+bugs            : cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf mds
+bogomips        : 5600.00
+clflush size    : 64
+cache_alignment : 64
+address sizes   : 43 bits physical, 48 bits virtual
+power management:
+
+processor       : 4
+vendor_id       : GenuineIntel
+cpu family      : 6
+model           : 62
+model name      : Intel(R) Xeon(R) CPU E5-2680 v2 @ 2.80GHz
+stepping        : 4
+microcode       : 0x42d
+cpu MHz         : 2799.565
+cache size      : 25600 KB
+physical id     : 1
+siblings        : 4
+core id         : 0
+cpu cores       : 4
+apicid          : 4
+initial apicid  : 4
+fpu             : yes
+fpu_exception   : yes
+cpuid level     : 13
+wp              : yes
+flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx rdtscp lm flush_l1d constant_tsc arch_perfmon nopl xtopology tsc_reliable nonstop_tsc eagerfpu pni pclmulqdq ssse3 cx16 pcid sse4_1 sse4_2 x2apic popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm arat ibrs stibp ia32_arch_caps ibpb ssbd pti fsgsbase tsc_adjust smep
+bugs            : cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf mds
+bogomips        : 5600.00
+clflush size    : 64
+cache_alignment : 64
+address sizes   : 43 bits physical, 48 bits virtual
+power management:
+
+processor       : 5
+vendor_id       : GenuineIntel
+cpu family      : 6
+model           : 62
+model name      : Intel(R) Xeon(R) CPU E5-2680 v2 @ 2.80GHz
+stepping        : 4
+microcode       : 0x42d
+cpu MHz         : 2799.565
+cache size      : 25600 KB
+physical id     : 1
+siblings        : 4
+core id         : 1
+cpu cores       : 4
+apicid          : 5
+initial apicid  : 5
+fpu             : yes
+fpu_exception   : yes
+cpuid level     : 13
+wp              : yes
+flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx rdtscp lm flush_l1d constant_tsc arch_perfmon nopl xtopology tsc_reliable nonstop_tsc eagerfpu pni pclmulqdq ssse3 cx16 pcid sse4_1 sse4_2 x2apic popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm arat ibrs stibp ia32_arch_caps ibpb ssbd pti fsgsbase tsc_adjust smep
+bugs            : cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf mds
+bogomips        : 5600.00
+clflush size    : 64
+cache_alignment : 64
+address sizes   : 43 bits physical, 48 bits virtual
+power management:
+
+processor       : 6
+vendor_id       : GenuineIntel
+cpu family      : 6
+model           : 62
+model name      : Intel(R) Xeon(R) CPU E5-2680 v2 @ 2.80GHz
+stepping        : 4
+microcode       : 0x42d
+cpu MHz         : 2799.565
+cache size      : 25600 KB
+physical id     : 1
+siblings        : 4
+core id         : 2
+cpu cores       : 4
+apicid          : 6
+initial apicid  : 6
+fpu             : yes
+fpu_exception   : yes
+cpuid level     : 13
+wp              : yes
+flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx rdtscp lm flush_l1d constant_tsc arch_perfmon nopl xtopology tsc_reliable nonstop_tsc eagerfpu pni pclmulqdq ssse3 cx16 pcid sse4_1 sse4_2 x2apic popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm arat ibrs stibp ia32_arch_caps ibpb ssbd pti fsgsbase tsc_adjust smep
+bugs            : cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf mds
+bogomips        : 5600.00
+clflush size    : 64
+cache_alignment : 64
+address sizes   : 43 bits physical, 48 bits virtual
+power management:
+
+processor       : 7
+vendor_id       : GenuineIntel
+cpu family      : 6
+model           : 62
+model name      : Intel(R) Xeon(R) CPU E5-2680 v2 @ 2.80GHz
+stepping        : 4
+microcode       : 0x42d
+cpu MHz         : 2799.565
+cache size      : 25600 KB
+physical id     : 1
+siblings        : 4
+core id         : 3
+cpu cores       : 4
+apicid          : 7
+initial apicid  : 7
+fpu             : yes
+fpu_exception   : yes
+cpuid level     : 13
+wp              : yes
+flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx rdtscp lm flush_l1d constant_tsc arch_perfmon nopl xtopology tsc_reliable nonstop_tsc eagerfpu pni pclmulqdq ssse3 cx16 pcid sse4_1 sse4_2 x2apic popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm arat ibrs stibp ia32_arch_caps ibpb ssbd pti fsgsbase tsc_adjust smep
+bugs            : cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf mds
+bogomips        : 5600.00
+clflush size    : 64
+cache_alignment : 64
+address sizes   : 43 bits physical, 48 bits virtual
+power management:
+
+[oracle@hrewlinfoms01 etc]$

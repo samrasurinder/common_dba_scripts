@@ -1,0 +1,34 @@
+Check who is LOCKING the database account
+
+(1)
+CREATE TABLE sys.logon_trigger
+(
+USERNAME VARCHAR2(30),
+USERHOST VARCHAR2(128),
+TIMESTAMP DATE
+);
+(2) Second I created below trigger:
+
+CREATE OR REPLACE TRIGGER sys.logon_trigger
+AFTER SERVERERROR ON DATABASE
+BEGIN
+  IF (IS_SERVERERROR(1017)) THEN
+    INSERT INTO logon_trigger VALUES(SYS_CONTEXT('USERENV', 'AUTHENTICATED_IDENTITY'), SYS_CONTEXT('USERENV', 'HOST'), SYSDATE);
+    COMMIT;
+  END IF;
+END;
+/
+
+(3)
+Then third simulated a wrong password access with my account and issued:
+
+SQL> ALTER SESSION SET nls_date_format='dd-mon-yyyy hh24:mi:ss';
+
+SESSION altered.
+
+SET lines 200
+col USERHOST FOR a30
+SELECT * FROM sys.logon_trigger ORDER BY TIMESTAMP DESC;
+
+drop trigger sys.logon_trigger;
+drop table sys.logon_trigger;

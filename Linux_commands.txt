@@ -1,0 +1,22 @@
+*** Linux commands***
+
+1. Restart linux :- https://www.binarytides.com/linux-command-shutdown-reboot-restart-system/
+   The syntax is
+   shutdown [OPTION] [TIME] [MESSAGE]
+
+   #shutdown -r now
+
+   The shutdown command can be used to restart a system with the r option instead of the h option. 
+   Usage is same as before. Just replace the h option with r option.
+   # shutdown -r +5 "Server will restart in 5 minutes. Please save your work."
+2. Reboot Command
+   # reboot
+   # reboot -f
+
+3. Find Memory:-
+   free
+   free -h      <-- More readable.
+3. rpm -qa |grep oracle   <--- Find packages Installed on Linux.
+
+5. stop firewall on a server:-
+   service iptables stop

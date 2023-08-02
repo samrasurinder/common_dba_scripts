@@ -1,0 +1,86 @@
+# Some basic steps to cluster the database if RConfig fails
+==========================================================================
+
+# Set a few environment variables
+
+export ORACLE_HOME=/u02/app/oracle/product/11.2.0.4/db_1
+export DB_NAME=CRMASB
+export ENV=`echo $DB_NAME | cut -c1-3`
+export ORACLE_SID=${DB_NAME}1
+export DISK_GROUP=+DATA
+export REFRESH_DATE=`date +"%Y_%m_%d"`
+
+# Configure the database
+
+$ORACLE_HOME/bin/srvctl config database -d ${DB_NAME}
+$ORACLE_HOME/bin/srvctl stop database -d ${DB_NAME}
+$ORACLE_HOME/bin/srvctl remove database -d ${DB_NAME} -f
+$ORACLE_HOME/bin/srvctl add database -d ${DB_NAME} -o /u02/app/oracle/product/11.2.0.4/db_1
+$ORACLE_HOME/bin/srvctl add instance -d ${DB_NAME} -i ${DB_NAME}1 -n hrewoel02
+$ORACLE_HOME/bin/srvctl add instance -d ${DB_NAME} -i ${DB_NAME}2 -n hrewoel03
+$ORACLE_HOME/bin/srvctl modify database -d ${DB_NAME} -p ${DISK_GROUP}/${DB_NAME}/spfile${DB_NAME}.ora
+$ORACLE_HOME/bin/srvctl config database -d ${DB_NAME}
+
+# Start the instance and alter cluster specific parameters
+
+export ORACLE_SID=${DB_NAME}1
+export ORACLE_UNQNAME=${DB_NAME}
+
+$ORACLE_HOME/bin/srvctl start instance -d ${DB_NAME} -i ${DB_NAME}1
+
+$ORACLE_HOME/bin/sqlplus -s "/ as sysdba" << EOF
+alter system set cluster_database = TRUE scope=spfile;
+alter system set cluster_database_instances = 2 scope=spfile;
+ALTER SYSTEM SET instance_name=${DB_NAME}1 SCOPE=SPFILE SID='${DB_NAME}1';
+ALTER SYSTEM SET instance_number=1 SCOPE=SPFILE SID='${DB_NAME}1';
+ALTER SYSTEM SET thread=1  SCOPE=SPFILE SID='${DB_NAME}1';
+ALTER SYSTEM SET undo_tablespace=UNDOTBS1 SCOPE=SPFILE SID='${DB_NAME}1';
+ALTER SYSTEM SET instance_name=${DB_NAME}2 SCOPE=SPFILE SID='${DB_NAME}2';
+ALTER SYSTEM SET instance_number=2 SCOPE=SPFILE SID='${DB_NAME}2';
+ALTER SYSTEM SET thread=2  SCOPE=SPFILE SID='${DB_NAME}2';
+ALTER SYSTEM SET undo_tablespace=UNDOTBS2 SCOPE=SPFILE SID='${DB_NAME}2';
+EOF
+
+# Restart the instance with cluster specific parameters
+
+$ORACLE_HOME/bin/srvctl stop database -d ${DB_NAME}
+sleep 10
+export ORACLE_SID=${DB_NAME}1
+export ORACLE_UNQNAME=${DB_NAME}
+$ORACLE_HOME/bin/srvctl start instance -d ${DB_NAME} -i ${DB_NAME}1
+
+$ORACLE_HOME/bin/sqlplus -s "/ as sysdba" << EOF
+set lines 200
+col WRL_PARAMETER for a50
+select * from gv\$encryption_wallet;
+EOF
+
+# Run the post refresh
+
+/infshare/oracle/scripts/refresh/bin/build/${ENV}/build_driver_${ENV}.post ${DB_NAME} | tee /home/oracle/${DB_NAME}_Post_Refresh_${REFRESH_DATE}.log
+
+$ORACLE_HOME/bin/sqlplus -s "/ as sysdba" << EOF
+@$ORACLE_HOME/dbs/init${DB_NAME}_REFRESH.ora;
+exit;
+EOF
+
+sleep 5
+
+# Bounce the database and re-open both nodes
+
+$ORACLE_HOME/bin/srvctl stop database -d ${DB_NAME}
+export ORACLE_UNQNAME=${DB_NAME}
+$ORACLE_HOME/bin/srvctl setenv database -d ${DB_NAME} -t "ORACLE_UNQNAME=${DB_NAME}"
+sleep 5
+$ORACLE_HOME/bin/srvctl start database -d ${DB_NAME}
+sleep 5
+$ORACLE_HOME/bin/srvctl status database -d ${DB_NAME}
+sleep5
+$ORACLE_HOME/bin/sqlplus -s "/ as sysdba" << EOF
+set lines 200
+col WRL_PARAMETER for a50
+select * from gv\$encryption_wallet;
+EOF
+
+### Run the encode_decode.sql if necessary... <--- Post refresh should cover this so see if you can bring up HROnline using the respective URL
+### You may need to bounce the database and export the ORACLE_UQNAME a few times to get both instances syncronized and working smoothly.
